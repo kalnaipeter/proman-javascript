@@ -7,10 +7,7 @@ export let dom = {
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
-        dataHandler.getBoards(function(boards){
-            dom.showBoards(boards);
-            dom.addEventListeners();
-        });
+        dataHandler.getBoards(console.log);
     },
     showBoards: function (boards) {
         // shows boards appending them to #boards div
@@ -63,6 +60,7 @@ export let dom = {
         inputField.addEventListener('keypress',(event) => {
             if (event.key == "Enter"){
                 dataHandler.sendNewBoardTitle(boardId, newTitle, changeBackInputField);
+                event.preventDefault();
             }
         });
     },

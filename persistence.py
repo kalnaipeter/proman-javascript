@@ -56,14 +56,14 @@ def clear_cache():
 #     return _get_data('cards', CARDS_FILE, force)
 
 @database_common.connection_handler
-def get_board(cursor,board_id):
+def get_statuses(cursor, force=False):
     cursor.execute("""
-                    SELECT * FROM statuses
-                    WHERE id = %(board_id)s;
-                    """,
-                   {"statuses":statuses})
-    board = cursor.fetchone()
-    return board
+                    SELECT * FROM statuses;
+                    """)
+    table_data = cursor.fetchall()
+    if force or "statuses" not in _cache:
+        _cache["statuses"] = table_data
+    return _cache["statuses"]
 
 
 @database_common.connection_handler
