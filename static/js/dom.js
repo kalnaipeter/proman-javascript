@@ -7,7 +7,10 @@ export let dom = {
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
-        dataHandler.getBoards(console.log);
+        dataHandler.getBoards(function(boards){
+            dom.showBoards(boards);
+            dom.addEventListeners();
+        });
     },
     showBoards: function (boards) {
         // shows boards appending them to #boards div
@@ -49,16 +52,20 @@ export let dom = {
         titleElement.innerHTML = "";
         titleElement.appendChild(inputField);
         inputField.focus();
-        inputField.addEventListener('blur', (event) => {
-            titleElement.innerHTML = boardTitle;
+        inputField.addEventListener('keyup', (event) => {
+            console.log("belép");
+            if(event.key == "Escape"){
+                titleElement.innerHTML = boardTitle;
+            }
         });
-        let newTitle = inputField.value;
-        let changeBackInputField = () => {
-            titleElement.innerHTML = newTitle;
-        };
+
 
         inputField.addEventListener('keypress',(event) => {
             if (event.key == "Enter"){
+                let newTitle = inputField.value;
+                let changeBackInputField = () => {
+                    titleElement.innerHTML = newTitle;
+                };
                 dataHandler.sendNewBoardTitle(boardId, newTitle, changeBackInputField);
                 event.preventDefault();
             }

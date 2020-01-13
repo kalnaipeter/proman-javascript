@@ -101,8 +101,6 @@ def get_cards(cursor, force=False):
 
 @database_common.connection_handler
 def edit_board_title(cursor,board_id,new_title):
-    print(board_id)
-    print(new_title)
     cursor.execute("""
                     UPDATE boards
                     SET title = %(new_title)s
