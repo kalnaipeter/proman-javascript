@@ -9,6 +9,7 @@ export let dom = {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
             dom.showBoards(boards);
+            dom.addEventListeners();
         });
     },
     showBoards: function (boards) {
@@ -19,7 +20,7 @@ export let dom = {
 
         for(let board of boards){
             boardList += `
-                <li>${board.title}</li>
+                <li class="board-title" data-boardid="${board.id}">${board.title}</li>
             `;
         }
 
@@ -40,4 +41,38 @@ export let dom = {
         // it adds necessary event listeners also
     },
     // here comes more features
+    changeBoardTitle: function (event) {
+        let titleElement = event.target;
+        let boardTitle = titleElement.innerText;
+        let inputField = document.createElement("input");
+        let boardId = titleElement.dataset.boardid;
+
+        inputField.setAttribute('value',boardTitle);
+
+        titleElement.innerHTML = "";
+        titleElement.appendChild(inputField);
+        inputField.focus();
+        inputField.addEventListener('blur', (event) => {
+            titleElement.innerHTML = boardTitle;
+        });
+        let newTitle = inputField.value;
+        let changeBackInputField = () => {
+            titleElement.innerHTML = newTitle;
+        };
+
+        inputField.addEventListener('keypress',(event) => {
+            if (event.key == "Enter"){
+                dataHandler.sendNewBoardTitle(boardId, newTitle, changeBackInputField);
+            }
+        });
+    },
+    addEventListeners: function() {
+        this.addBoardTitleEventListener();
+    },
+    addBoardTitleEventListener: function() {
+        let board_title_elements = document.querySelectorAll(".board-title");
+        board_title_elements.forEach((element) => {
+            element.addEventListener('dblclick', this.changeBoardTitle)
+        });
+    }
 };
