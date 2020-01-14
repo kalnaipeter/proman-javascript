@@ -27,6 +27,11 @@ def get_boards():
     return persistence.get_boards(force=True)
 
 
+def add_new_board():
+    persistence.add_new_board()
+    return persistence.get_latest_board()
+
+
 def get_cards_for_board(board_id):
     persistence.clear_cache()
     all_cards = persistence.get_cards()
