@@ -53,13 +53,10 @@ export let dom = {
         titleElement.appendChild(inputField);
         inputField.focus();
         inputField.addEventListener('keyup', (event) => {
-            console.log("belép");
             if(event.key == "Escape"){
                 titleElement.innerHTML = boardTitle;
             }
         });
-
-
         inputField.addEventListener('keypress',(event) => {
             if (event.key == "Enter"){
                 let newTitle = inputField.value;
@@ -71,13 +68,15 @@ export let dom = {
             }
         });
     },
-    addEventListeners: function() {
-        this.addBoardTitleEventListener();
-    },
+
     addBoardTitleEventListener: function() {
         let board_title_elements = document.querySelectorAll(".board-title");
         board_title_elements.forEach((element) => {
             element.addEventListener('dblclick', this.changeBoardTitle)
         });
+    },
+
+    addEventListeners: function() {
+        this.addBoardTitleEventListener();
     }
 };
