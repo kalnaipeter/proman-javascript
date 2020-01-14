@@ -188,7 +188,7 @@ export let dom = {
         });
     },
     addNewBoard: function(event){
-        dataHandler.createNewBoard();
+        dataHandler.createNewBoard()
     },
 
     addEventListeners: function() {

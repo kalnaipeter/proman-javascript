@@ -124,4 +124,4 @@ def get_latest_board(cursor):
     """)
 
     board_id = cursor.fetchone()
-    return board_id['id']
+    return board_id
