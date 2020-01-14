@@ -117,11 +117,11 @@ def add_new_board(cursor):
     """)
 
 
-@database_common.connection_handler
-def get_latest_board(cursor):
-    cursor.execute("""
-                    SELECT MAX(id) FROM boards
-    """)
-
-    board_id = cursor.fetchone()
-    return board_id['id']
+# @database_common.connection_handler
+# def get_latest_board(cursor):
+#     cursor.execute("""
+#                     SELECT MAX(id) FROM boards
+#     """)
+#
+#     board_id = cursor.fetchone()
+#     return board_id['id']

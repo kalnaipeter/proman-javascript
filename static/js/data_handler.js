@@ -30,6 +30,7 @@ export let dataHandler = {
         })
         .then(response => response.json())  // parse the response as JSON
         .then(json_response => {
+            console.log(json_response);
             if (callback) {
                 callback(json_response)
             }
@@ -67,7 +68,7 @@ export let dataHandler = {
     },
     createNewBoard: function (callback) {
         // creates new board, saves it and calls the callback function with its data
-        this._api_get("/add-new-board", callback);
+        this._api_post("/add-new-board", callback);
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data

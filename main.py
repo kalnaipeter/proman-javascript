@@ -20,7 +20,7 @@ def edit_board_title(board_id:int):
     data_handler.edit_board_title(board_id,request.json["new_title"])
 
 
-@app.route("/add-new-board")
+@app.route("/add-new-board",methods=["POST"])
 @json_response
 def add_new_board():
     data_handler.add_new_board()
