@@ -6,31 +6,27 @@ export let dom = {
         // This function should run once, when the page is loaded.
     },
 
-    newBoard: function (boardId) {
+    newBoard: function () {
         let newBoardNode = `
 <div class="board-container">
         <section class="board">
-            <div class="board-header"><span class="board-title" data-board="${boardId}">New Board</span>
+            <div class="board-header"><span class="board-title">New Board</span>
                 <button class="board-add">Add Card</button>
                 <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
             </div>
             <div class="board-columns">
                 <div class="board-column">
                     <div class="board-column-title">New</div>
-                    <div class="board-column-content"></div>
                 </div>
             </div>
                 <div class="board-column">
                     <div class="board-column-title">In Progress</div>
-                    <div class="board-column-content"></div>
                 </div>
                 <div class="board-column">
                     <div class="board-column-title">Testing</div>
-                    <div class="board-column-content"></div>
                 </div>
                 <div class="board-column">
                     <div class="board-column-title">Done</div>
-                    <div class="board-column-content"></div>
                 </div>`;
 
         let boardsContainer = document.querySelector('#boards');
@@ -174,8 +170,6 @@ export let dom = {
                 titleElement.innerHTML = boardTitle;
             }
         });
-
-
         inputField.addEventListener('keypress',(event) => {
             if (event.key == "Enter"){
                 let newTitle = inputField.value;
@@ -188,7 +182,7 @@ export let dom = {
         });
     },
     addNewBoard: function(event){
-        dataHandler.createNewBoard()
+        dataHandler.createNewBoard(dom.newBoard());
     },
 
     addEventListeners: function() {

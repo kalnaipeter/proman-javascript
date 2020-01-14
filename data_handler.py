@@ -28,8 +28,8 @@ def get_boards():
 
 
 def add_new_board():
-    persistence.add_new_board()
-    return persistence.get_latest_board()
+    return persistence.add_new_board()
+    # return persistence.get_latest_board()
 
 
 def get_cards_for_board(board_id):
