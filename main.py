@@ -14,10 +14,16 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/edit-board-title/<int:board_id>",methods=["POST"])
+@app.route("/edit-board-title/<int:board_id>", methods=["POST"])
 @json_response
 def edit_board_title(board_id:int):
     data_handler.edit_board_title(board_id,request.json["new_title"])
+
+
+@app.route("/add-new-board")
+@json_response
+def add_new_board():
+    data_handler.add_new_board()
 
 
 @app.route("/get-boards")

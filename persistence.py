@@ -108,3 +108,20 @@ def edit_board_title(cursor,board_id,new_title):
                     """,
                    {"board_id":board_id,
                     "new_title":new_title})
+
+
+@database_common.connection_handler
+def add_new_board(cursor):
+    cursor.execute("""
+                    INSERT INTO boards (title) VALUES ('New Board')
+    """)
+
+
+@database_common.connection_handler
+def get_latest_board(cursor):
+    cursor.execute("""
+                    SELECT MAX(id) FROM boards
+    """)
+
+    board_id = cursor.fetchone()
+    return board_id['id']
