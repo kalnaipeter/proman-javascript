@@ -173,6 +173,7 @@ export let dom = {
     addEventListeners: function() {
         this.addBoardTitleEventListener();
         this.newBoardEventListener();
+        this.deleteBoardEventListener()
     },
     addBoardTitleEventListener: function() {
         let board_title_elements = document.querySelectorAll(".board-title");
@@ -183,5 +184,10 @@ export let dom = {
     newBoardEventListener: function () {
         let newBoardBtn = document.querySelector("#newBoard");
         newBoardBtn.addEventListener('click',  this.addNewBoard)
+    },
+
+    deleteBoardEventListener: function () {
+        let deleteBtn = document.querySelector('.delete');
+        deleteBtn.addEventListener('click', this.deleteBoard)
     }
 };
