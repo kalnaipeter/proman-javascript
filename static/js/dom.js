@@ -6,35 +6,6 @@ export let dom = {
         // This function should run once, when the page is loaded.
     },
 
-    newBoard: function () {
-        let newBoardNode = `
-<div class="board-container">
-        <section class="board">
-            <div class="board-header"><span class="board-title">New Board</span>
-                <button class="board-add">Add Card</button>
-                <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
-            </div>
-            <div class="board-columns">
-                <div class="board-column">
-                    <div class="board-column-title">New</div>
-                </div>
-            </div>
-                <div class="board-column">
-                    <div class="board-column-title">In Progress</div>
-                </div>
-                <div class="board-column">
-                    <div class="board-column-title">Testing</div>
-                </div>
-                <div class="board-column">
-                    <div class="board-column-title">Done</div>
-                </div>`;
-
-        let boardsContainer = document.querySelector('#boards');
-        boardsContainer.insertAdjacentHTML("beforeend", newBoardNode);
-    },
-
-
-
     loadBoards: function () {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
@@ -170,6 +141,8 @@ export let dom = {
                 titleElement.innerHTML = boardTitle;
             }
         });
+
+
         inputField.addEventListener('keypress',(event) => {
             if (event.key == "Enter"){
                 let newTitle = inputField.value;
@@ -181,9 +154,13 @@ export let dom = {
             }
         });
     },
-    addNewBoard: function(event){
-        dataHandler.createNewBoard(dom.newBoard());
+    addNewBoard: function(){
+        dataHandler.createNewBoard(dom.loadBoards());
     },
+
+
+
+
 
     addEventListeners: function() {
         this.addBoardTitleEventListener();
