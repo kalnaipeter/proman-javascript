@@ -23,6 +23,7 @@ export let dom = {
             <div class="board-header"><span class="board-title" data-board="${board.id}">${board.title}</span>
                 <button class="board-add">Add Card</button>
                 <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
+                <button class="delete" data-boardid="${board.id}">Delete Board</button>
             </div>
             <div class="board-columns">
                 <div class="board-column">
@@ -160,13 +161,17 @@ export let dom = {
         dataHandler.createNewBoard(dom.loadBoards);
     },
 
-
-
+    deleteBoard: function(event){
+        let deleteButton = event.currentTarget;
+        let boardId = deleteButton.dataset.boardid;
+        dataHandler.deleteBoard(boardId, dom.loadBoards);
+    },
 
 
     addEventListeners: function() {
         this.addBoardTitleEventListener();
         this.newBoardEventListener();
+        this.deleteBoardEventListener()
     },
     addBoardTitleEventListener: function() {
         let board_title_elements = document.querySelectorAll(".board-title");
@@ -177,5 +182,12 @@ export let dom = {
     newBoardEventListener: function () {
         let newBoardBtn = document.querySelector("#newBoard");
         newBoardBtn.addEventListener('click',  this.addNewBoard)
+    },
+
+    deleteBoardEventListener: function () {
+        let deleteBtnElements = document.querySelectorAll('.delete');
+        deleteBtnElements.forEach((element) => {
+            element.addEventListener('click', this.deleteBoard)
+        });
     }
 };
