@@ -187,7 +187,9 @@ export let dom = {
     },
 
     deleteBoardEventListener: function () {
-        let deleteBtn = document.querySelector('.delete');
-        deleteBtn.addEventListener('click', this.deleteBoard)
+        let deleteBtnElements = document.querySelectorAll('.delete');
+        deleteBtnElements.forEach((element) => {
+            element.addEventListener('click', this.deleteBoard)
+        });
     }
 };
