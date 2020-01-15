@@ -117,6 +117,15 @@ def add_new_board(cursor):
     """)
 
 
+@database_common.connection_handler
+def delete_board(cursor, board_id):
+    cursor.execute("""
+                    DELETE FROM boards
+                    WHERE id = %(board_id)s;
+    """,
+                   {"board_id": board_id})
+
+
 # @database_common.connection_handler
 # def get_latest_board(cursor):
 #     cursor.execute("""
