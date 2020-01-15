@@ -29,13 +29,13 @@ export let dom = {
                 </section>
             </div>`;
 
-        dom.createColumns(board);
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", boardNode);
+        dom.createColumns(board);
     },
 
     createColumns: function(board) {
-        let columnsContainer = document.querySelector(`board-columns-${board.id}`);
+        let columnsContainer = document.querySelector(`.board-columns-${board.id}`);
         let columnIndex = 0;
         for (let column of board.columns) {
             let newColumn = dom.createColumn(board.id, column, columnIndex);

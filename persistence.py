@@ -80,7 +80,8 @@ def get_board(cursor,board_id):
 @database_common.connection_handler
 def get_boards(cursor, force=False):
     cursor.execute("""
-                    SELECT * FROM boards;
+                    SELECT boards.id, boards.title, statuses.title AS columns FROM boards
+                    JOIN statuses ON boards.id = statuses.board_id;
                     """)
     table_data = cursor.fetchall()
     if force or "boards" not in _cache:
@@ -100,7 +101,7 @@ def get_cards(cursor, force=False):
 
 
 @database_common.connection_handler
-def edit_board_title(cursor,board_id,new_title):
+def edit_board_title(cursor, board_id, new_title):
     cursor.execute("""
                     UPDATE boards
                     SET title = %(new_title)s
@@ -112,16 +113,27 @@ def edit_board_title(cursor,board_id,new_title):
 
 @database_common.connection_handler
 def add_new_board(cursor):
+    columns = ['New', 'In Progress', 'Testing', 'Done']
     cursor.execute("""
-                    INSERT INTO boards (title, columns) VALUES ('New Board', ['New, In Progress', 'Testing', 'Done'])
+                        INSERT INTO boards (title) VALUES ('New Board')
+        """)
+    latest_board_id = get_latest_board()
+    for column_title in columns:
+        cursor.execute("""
+                        INSERT INTO statuses (title, board_id) 
+                        VALUES (%(column_title)s, (SELECT id from boards
+                        WHERE boards.id=%(latest_board_id)s));
+                        """,
+                       {"column_title": column_title,
+                        "latest_board_id": latest_board_id})
+
+
+@database_common.connection_handler
+def get_latest_board(cursor):
+    cursor.execute("""
+                    SELECT MAX(id) FROM boards
     """)
 
-
-# @database_common.connection_handler
-# def get_latest_board(cursor):
-#     cursor.execute("""
-#                     SELECT MAX(id) FROM boards
-#     """)
-#
-#     board_id = cursor.fetchone()
-#     return board_id['id']
+    result = cursor.fetchone()
+    board_id = result['max']
+    return board_id

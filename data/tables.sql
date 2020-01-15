@@ -23,7 +23,8 @@ CREATE TABLE cards (
 DROP TABLE IF EXISTS public.statuses;
 CREATE TABLE statuses (
     id serial,
-    title text
+    title text,
+    board_id bigint
 );
 
 
@@ -31,7 +32,8 @@ ALTER TABLE ONLY boards
     ADD CONSTRAINT pk_board_id PRIMARY KEY (id);
 
 ALTER TABLE ONLY statuses
-    ADD CONSTRAINT pk_status_id PRIMARY KEY (id);
+    ADD CONSTRAINT pk_status_id PRIMARY KEY (id),
+    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) references boards(id);
 
 ALTER TABLE ONLY cards
     ADD CONSTRAINT pk_card_id PRIMARY KEY (id),
