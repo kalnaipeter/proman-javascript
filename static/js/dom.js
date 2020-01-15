@@ -110,6 +110,8 @@ export let dom = {
     },
 
     showBoards: function(boards){
+        let boardsContainer = document.querySelector('#boards');
+        boardsContainer.innerHTML = ``;
         for(let board of boards){
             this.showBoard(board)
         }
@@ -155,7 +157,7 @@ export let dom = {
         });
     },
     addNewBoard: function(){
-        dataHandler.createNewBoard(dom.loadBoards());
+        dataHandler.createNewBoard(dom.loadBoards);
     },
 
 
