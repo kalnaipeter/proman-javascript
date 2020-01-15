@@ -7,7 +7,8 @@ ALTER TABLE IF EXISTS ONLY public.statuses DROP CONSTRAINT IF EXISTS pk_status_i
 DROP TABLE IF EXISTS public.boards;
 CREATE TABLE boards (
     id serial,
-    title text
+    title text,
+    columns text[]
 );
 
 DROP TABLE IF EXISTS public,cards;

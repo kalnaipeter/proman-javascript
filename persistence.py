@@ -113,7 +113,7 @@ def edit_board_title(cursor,board_id,new_title):
 @database_common.connection_handler
 def add_new_board(cursor):
     cursor.execute("""
-                    INSERT INTO boards (title) VALUES ('New Board')
+                    INSERT INTO boards (title, columns) VALUES ('New Board', ['New, In Progress', 'Testing', 'Done'])
     """)
 
 

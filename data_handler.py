@@ -11,7 +11,7 @@ def get_card_status(status_id):
     return next((status['title'] for status in statuses if status['id'] == str(status_id)), 'Unknown')
 
 
-def edit_board_title(board_id,new_title):
+def edit_board_title(board_id, new_title):
     return persistence.edit_board_title(board_id,new_title)
 
 
