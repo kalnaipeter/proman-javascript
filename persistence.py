@@ -80,8 +80,9 @@ def get_board(cursor,board_id):
 @database_common.connection_handler
 def get_boards(cursor, force=False):
     cursor.execute("""
-                    SELECT boards.id, boards.title, statuses.title AS columns FROM boards
-                    JOIN statuses ON boards.id = statuses.board_id;
+                    SELECT boards.id, boards.title, array_agg(statuses.title) AS columns FROM boards
+                    JOIN statuses ON boards.id = statuses.board_id
+                    GROUP BY boards.id, boards.title
                     """)
     table_data = cursor.fetchall()
     if force or "boards" not in _cache:

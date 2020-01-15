@@ -7,8 +7,7 @@ ALTER TABLE IF EXISTS ONLY public.statuses DROP CONSTRAINT IF EXISTS pk_status_i
 DROP TABLE IF EXISTS public.boards;
 CREATE TABLE boards (
     id serial,
-    title text,
-    columns text[]
+    title text
 );
 
 DROP TABLE IF EXISTS public,cards;
@@ -40,4 +39,13 @@ ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) references boards(id),
     ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) references statuses(id);
 
+INSERT INTO boards (title) VALUES
+    ('BoardTitle'),
+    ('BoardTitle2'),
+    ('BoardTitle3');
 
+INSERT INTO statuses (title, board_id) VALUES
+('StatusTitle', 1),
+('StatusTitle2', 1),
+('StatusTitle3', 2),
+('StatusTitle4', 2);
