@@ -164,8 +164,6 @@ export let dom = {
     deleteBoard: function(event){
         let deleteButton = event.currentTarget;
         let boardId = deleteButton.dataset.boardid;
-        console.log(deleteButton);
-        console.log(boardId);
         dataHandler.deleteBoard(boardId, dom.loadBoards);
     },
 
