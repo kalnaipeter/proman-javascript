@@ -40,14 +40,15 @@ ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) references statuses(id);
 
 INSERT INTO boards (title) VALUES
-    ('BoardTitle'),
-    ('BoardTitle2'),
-    ('BoardTitle3');
+    ('Teamwork week'),
+    ('Self-instructed week');
 
 INSERT INTO statuses (title, board_id) VALUES
-('StatusTitle', 1),
-('StatusTitle2', 1),
-('StatusTitle3', 2),
-('StatusTitle4', 2),
-('StatusTitle5', 2),
-('StatusTitle6', 2);
+('New', 1),
+('In Progress', 1),
+('Testing', 1),
+('Done', 1),
+('New', 2),
+('In Progress', 2),
+('Testing', 2),
+('Done', 2);
