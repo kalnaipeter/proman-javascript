@@ -61,6 +61,7 @@ export let dataHandler = {
         // the status is retrieved and then the callback function is called with the status
     },
     getCardsByBoardId: function (boardId, callback) {
+        this._api_post('/get-cards/'+boardId,null,callback)
         // the cards are retrieved and then the callback function is called with the cards
     },
     getCard: function (cardId, callback) {
