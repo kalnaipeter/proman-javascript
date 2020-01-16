@@ -59,7 +59,7 @@ def clear_cache():
 @database_common.connection_handler
 def get_statuses(cursor, force=False):
     cursor.execute("""
-                    SELECT * FROM statuses;
+                    SELECT * FROM statuses ;
                     """)
     table_data = cursor.fetchall()
     if force or "statuses" not in _cache:
@@ -90,6 +90,17 @@ def get_boards(cursor, force=False):
         _cache["boards"] = table_data
     return _cache["boards"]
 
+
+# @database_common.connection_handler
+# def get_cards(cursor, force=False):
+#     cursor.execute("""
+#                     SELECT cards.title as card_title, s.title as status_title, cards.board_id, cards.id FROM cards
+#                     JOIN statuses s on cards.status_id = s.id;
+#                     """)
+#     table_data = cursor.fetchall()
+#     if force or "cards" not in _cache:
+#         _cache["cards"] = table_data
+#     return _cache["cards"]
 
 @database_common.connection_handler
 def get_cards(cursor, force=False):
@@ -139,7 +150,6 @@ def get_latest_board(cursor):
     result = cursor.fetchone()
     board_id = result['max']
     return board_id
-
 
 
 @database_common.connection_handler
