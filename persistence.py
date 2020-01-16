@@ -1,5 +1,6 @@
 # import csv
 import database_common
+import data_handler
 
 # STATUSES_FILE = './data/statuses.csv'
 # BOARDS_FILE = './data/boards.csv'
@@ -140,6 +141,29 @@ def get_latest_board(cursor):
     return board_id
 
 
+
+@database_common.connection_handler
+def registration(cursor, username, password):
+    hashed_bytes = data_handler.get_hash_from_password(password)
+    cursor.execute("""
+                    INSERT INTO usertable (username,password)
+                    VALUES (%(username)s,%(hashed_bytes)s);
+                   """,
+                   {"username": username,
+                    "hashed_bytes": hashed_bytes})
+
+
+@database_common.connection_handler
+def get_hash_from_database(cursor, username):
+    cursor.execute("""
+                    SELECT password FROM usertable
+                    WHERE username = %(username)s
+                    """,
+                   {"username": username})
+    hash = cursor.fetchone()
+    return hash
+
+
 @database_common.connection_handler
 def create_new_column(cursor, target_board_id):
     cursor.execute("""
@@ -155,3 +179,4 @@ def delete_board(cursor, board_id):
                     WHERE id = %(board_id)s;
     """,
                    {"board_id": board_id})
+
