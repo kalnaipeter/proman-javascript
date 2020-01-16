@@ -3,6 +3,7 @@ ALTER TABLE IF EXISTS ONLY public.cards DROP CONSTRAINT IF EXISTS pk_card_id CAS
 ALTER TABLE IF EXISTS ONLY public.cards DROP CONSTRAINT IF EXISTS fk_board_id CASCADE;
 ALTER TABLE IF EXISTS ONLY public.cards DROP CONSTRAINT IF EXISTS fk_status_id CASCADE;
 ALTER TABLE IF EXISTS ONLY public.statuses DROP CONSTRAINT IF EXISTS pk_status_id CASCADE;
+ALTER TABLE IF EXISTS ONLY  public.usertable DROP CONSTRAINT IF EXISTS pk_user_id CASCADE;
 
 DROP TABLE IF EXISTS public.boards;
 CREATE TABLE boards (
@@ -26,13 +27,22 @@ CREATE TABLE statuses (
     board_id bigint
 );
 
+DROP TABLE IF EXISTS public.usertable;
+CREATE TABLE usertable (
+    id serial,
+    username text,
+    password text
+);
+
+ALTER TABLE only usertable
+    ADD CONSTRAINT pk_user_id PRIMARY KEY (id);
 
 ALTER TABLE ONLY boards
     ADD CONSTRAINT pk_board_id PRIMARY KEY (id);
 
 ALTER TABLE ONLY statuses
     ADD CONSTRAINT pk_status_id PRIMARY KEY (id),
-    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) references boards(id) ON DELETE CASCADE ;
+    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) references boards(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY cards
     ADD CONSTRAINT pk_card_id PRIMARY KEY (id),
