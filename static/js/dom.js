@@ -48,17 +48,18 @@ export let dom = {
     createColumn: function(board_id, columnTitle) {
             let columnContainer = document.createElement('div');
             columnContainer.setAttribute('class', 'board-column');
-            columnContainer.setAttribute('data-column', `'${board_id}'`);
+            columnContainer.setAttribute('data-column', `${board_id}`);
+            columnContainer.setAttribute('data-title', `${columnTitle}`);
 
             let titleContainer = document.createElement('div');
             titleContainer.setAttribute('class', 'board-column-title');
-            columnContainer.setAttribute('data-column-title', `'${board_id}`);
+            columnContainer.setAttribute('data-columnTitle', `${board_id}`);
             titleContainer.innerHTML = `${columnTitle}`;
             columnContainer.appendChild(titleContainer);
 
             let columnContent = document.createElement('div');
             columnContent.setAttribute('class', 'board-column-content');
-            columnContainer.setAttribute('data-column-content', `'${board_id}`);
+            columnContainer.setAttribute('data-columnContent', `${board_id}`);
             columnContainer.appendChild(columnContent);
 
             return columnContainer;
@@ -66,7 +67,7 @@ export let dom = {
     addNewColumn: function (event) {
         let addColumnButton = event.currentTarget;
         let targetBoardID = addColumnButton.dataset.addcolumn;
-        let columnContainer = document.querySelector(`[data-columns='${targetBoardID}'`);
+        let columnContainer = document.querySelector(`[data-columns=${targetBoardID}`);
         let newColumn = dom.createColumn(targetBoardID, 'New Column');
         columnContainer.appendChild(newColumn);
         dataHandler.createNewColumn(targetBoardID, dom.loadBoards);
@@ -90,10 +91,10 @@ export let dom = {
     // here comes more features
     changeBoardTitle: function (event) {
         let titleElement = event.currentTarget;
+        console.log(titleElement);
         let boardTitle = titleElement.innerText;
         let inputField = document.createElement("input");
         let boardId = titleElement.dataset.board;
-        console.log(titleElement);
         console.log(boardId);
 
         inputField.setAttribute('value',boardTitle);
@@ -119,6 +120,35 @@ export let dom = {
             }
         });
     },
+    changeColumnTitle: function (event) {
+        let titleElement = event.currentTarget;
+        let columnTitle = titleElement.innerText;
+        let inputField = document.createElement("input");
+        let titleContainer = event.currentTarget.parentNode;
+        let boardId = titleContainer.dataset.column;
+
+        inputField.setAttribute('value', columnTitle);
+
+        titleElement.innerHTML = "";
+        titleElement.appendChild(inputField);
+        inputField.focus();
+        inputField.addEventListener('keyup', (event) => {
+            if(event.key == "Escape"){
+                titleElement.innerHTML = columnTitle;
+            }
+        });
+
+        inputField.addEventListener('keypress',(event) => {
+            if (event.key == "Enter"){
+                let newTitle = inputField.value;
+                let changeBackInputField = () => {
+                    titleElement.innerHTML = newTitle;
+                };
+                dataHandler.sendNewColumnTitle(boardId, newTitle, changeBackInputField);
+                event.preventDefault();
+            }
+        });
+    },
     addNewBoard: function(){
         dataHandler.createNewBoard(dom.loadBoards);
     },
@@ -127,6 +157,7 @@ export let dom = {
         this.addBoardTitleEventListener();
         this.newBoardEventListener();
         this.newColumnEventListener();
+        this.editColumnTitleEventListener();
         this.deleteBoardEventListener()
     },
 
@@ -155,6 +186,12 @@ export let dom = {
         });
     },
 
+    editColumnTitleEventListener: function() {
+        let columnTitleElements = document.querySelectorAll(".board-column-title");
+        columnTitleElements.forEach((element) => {
+            element.addEventListener('dblclick', this.changeColumnTitle)
+        });
+    },
 
     deleteBoardEventListener: function () {
         let deleteBtnElements = document.querySelectorAll('.delete');

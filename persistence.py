@@ -113,6 +113,18 @@ def edit_board_title(cursor, board_id, new_title):
 
 
 @database_common.connection_handler
+def edit_column_title(cursor, board_id, new_title):
+    print(new_title)
+    cursor.execute("""
+                    UPDATE statuses
+                    SET title = %(new_title)s
+                    WHERE id = %(board_id)s;
+                    """,
+                   {"board_id": board_id,
+                    "new_title": new_title})
+
+
+@database_common.connection_handler
 def add_new_board(cursor):
     columns = ['New', 'In Progress', 'Testing', 'Done']
     cursor.execute("""
@@ -153,5 +165,5 @@ def delete_board(cursor, board_id):
     cursor.execute("""
                     DELETE FROM boards
                     WHERE id = %(board_id)s;
-    """,
+                    """,
                    {"board_id": board_id})

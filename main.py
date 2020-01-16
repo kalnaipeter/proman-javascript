@@ -26,6 +26,12 @@ def edit_board_title(board_id:int):
     data_handler.edit_board_title(board_id,request.json["new_title"])
 
 
+@app.route("/edit-column-title/<int:board_id>", methods=["POST"])
+@json_response
+def edit_column_title(board_id:int):
+    data_handler.edit_column_title(board_id, request.json["new_title"])
+
+
 @app.route("/add-new-board",methods=["POST"])
 @json_response
 def add_new_board():
