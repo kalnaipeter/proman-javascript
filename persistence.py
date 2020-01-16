@@ -81,7 +81,7 @@ def get_board(cursor,board_id):
 @database_common.connection_handler
 def get_boards(cursor, force=False):
     cursor.execute("""
-                    SELECT boards.id, boards.title, array_agg(json_build_object('title', statuses.title, 'id', statuses.id)) AS columns FROM boards
+                    SELECT boards.id, boards.title, array_agg(json_build_object('title', statuses.title, 'id', statuses.id) order by statuses.id) AS columns FROM boards
                     JOIN statuses ON boards.id = statuses.board_id
                     GROUP BY boards.id, boards.title
                     """)
@@ -125,14 +125,14 @@ def edit_board_title(cursor, board_id, new_title):
 
 
 @database_common.connection_handler
-def edit_column_title(cursor, board_id, new_title):
+def edit_column_title(cursor, column_id, new_title):
     print(new_title)
     cursor.execute("""
                     UPDATE statuses
                     SET title = %(new_title)s
-                    WHERE board_id = %(board_id)s;
+                    WHERE statuses.id = %(column_id)s;
                     """,
-                   {"board_id": board_id,
+                   {"column_id": column_id,
                     "new_title": new_title})
 
 
@@ -207,9 +207,8 @@ def delete_board(cursor, board_id):
 def add_new_card(cursor, board_id):
     cursor.execute("""
                     INSERT INTO cards (board_id, title, status_id) 
-                    SELECT %(board_id)s, 'New Card', statuses.id
+                    SELECT %(board_id)s, 'New Card', MIN(statuses.id)
                     FROM statuses
                     WHERE statuses.board_id = %(board_id)s
-                    LIMIT 1
     """,
                    {"board_id": board_id})

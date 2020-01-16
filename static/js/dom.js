@@ -52,7 +52,7 @@ export let dom = {
             columnContainer.setAttribute('class', 'board-column');
             columnContainer.setAttribute('data-column', `${board_id}`);
             columnContainer.setAttribute('data-title', `${columnTitle}`);
-            columnContainer.setAttribute('data-columnId', `${columnId}`);
+            columnContainer.setAttribute('data-columnid', `${columnId}`);
 
             let titleContainer = document.createElement('div');
             titleContainer.setAttribute('class', 'board-column-title');
@@ -145,8 +145,8 @@ export let dom = {
         let columnTitle = titleElement.innerText;
         let inputField = document.createElement("input");
         let titleContainer = event.currentTarget.parentNode;
-        let boardId = titleContainer.dataset.column.replace("'","");
-        boardId = boardId.replace("'","");
+        let columnId = titleContainer.dataset.columnid.replace("'","");
+        columnId = columnId.replace("'","");
         let alreadyChangedBack = false;
         inputField.setAttribute('value', columnTitle);
 
@@ -166,7 +166,7 @@ export let dom = {
                 let changeBackInputField = () => {
                     titleElement.innerHTML = newTitle;
                 };
-                dataHandler.sendNewColumnTitle(boardId, newTitle, changeBackInputField);
+                dataHandler.sendNewColumnTitle(columnId, newTitle, changeBackInputField);
                 event.preventDefault();
             }
         });
