@@ -8,17 +8,17 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <form name="login" action="/login-registration" method="post">
+        <form name="login" action="/login-registration" onsubmit="return validateForm()" method="post">
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <i class="fas fa-user"></i>
-            <label data-error="wrong" data-success="right" for="defaultForm-email">Your username</label>
+            <label data-error="wrong" data-success="right" for="defaultForm-email" name="username">Your username</label>
           <input type="text" name="username" id="defaultForm-email" class="form-control validate" placeholder="write here...">
         </div>
 
         <div class="md-form mb-4">
           <i class="fas fa-lock prefix grey-text"></i>
-            <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+            <label data-error="wrong" data-success="right" for="defaultForm-pass" name="password">Your password</label>
           <input type="password" name="password" id="defaultForm-pass" class="form-control validate" placeholder="write here...">
         </div>
 
@@ -30,3 +30,17 @@
     </div>
   </div>
 </div>
+<script>
+function validateForm() {
+  let x = document.forms["login"]["username"].value;
+  let y = document.forms["login"]["password"].value;
+  if (x == "") {
+    alert("Name must be filled out");
+    return false;
+  }
+  else if (y == ""){
+      alert("Password field must be filled out");
+      return false;
+  }
+}
+</script>

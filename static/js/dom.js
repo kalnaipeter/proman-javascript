@@ -46,8 +46,9 @@ export let dom = {
     },
 
     showBoards: function(boards){
+        let boardsContainer = document.querySelector('#boards');
+        boardsContainer.innerHTML = ``;
         for(let board of boards){
-            console.log("board");
             this.showBoard(board)
         }
     },
@@ -124,4 +125,5 @@ export let dom = {
             element.addEventListener('click',this.loadCards)
         });
     },
+
 };

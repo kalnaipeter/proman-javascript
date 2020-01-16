@@ -19,7 +19,7 @@
     </ul>
       <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('login_registration') }}" id="logout">{% if session.username %}Logout{% endif %}</a>
+                <a class="nav-link" href="{{ url_for('index',session="") }}" id="logout">{% if session.username %}Logout{% endif %}</a>
             </li>
         </ul>
   </div>

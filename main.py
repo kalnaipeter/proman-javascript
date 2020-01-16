@@ -10,7 +10,8 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 @app.route("/")
 def index():
-    print(session["username"])
+    if request.args.get("session") == "":
+        session["username"] = None
     """
     This is a one-pager which shows all the boards and cards
     """
@@ -36,6 +37,7 @@ def get_boards():
     """
     All the boards
     """
+    print(data_handler.get_boards())
     return data_handler.get_boards()
 
 
@@ -59,7 +61,6 @@ def get_cards_for_board(board_id: int):
 def login_registration():
     if request.method == "POST":
         if request.form["action"] == "registration":
-            print("nice")
             data_handler.registration(request.form["username"], request.form["password"])
             session["username"] = request.form["username"]
             return redirect(url_for("index"))
