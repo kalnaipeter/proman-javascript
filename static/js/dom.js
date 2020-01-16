@@ -120,7 +120,6 @@ export let dom = {
         let alreadyChangedBack = false;
         inputField.setAttribute('value',boardTitle);
 
-
         titleElement.innerHTML = "";
         titleElement.appendChild(inputField);
         inputField.focus();
@@ -147,18 +146,32 @@ export let dom = {
         let columnTitle = titleElement.innerText;
         let inputField = document.createElement("input");
         let titleContainer = event.currentTarget.parentNode;
-        let boardId = titleContainer.dataset.column;
-
+        let boardId = titleContainer.dataset.column.replace("'","");
+        boardId = boardId.replace("'","");
+        let alreadyChangedBack = false;
         inputField.setAttribute('value', columnTitle);
 
         titleElement.innerHTML = "";
         titleElement.appendChild(inputField);
         inputField.focus();
-        inputField.addEventListener('keyup', (event) => {
-            if(event.key == "Escape"){
+        inputField.addEventListener('blur',(event) => {
+            if (!alreadyChangedBack){
                 titleElement.innerHTML = columnTitle;
             }
         });
+
+        inputField.addEventListener('keypress',(event) => {
+            if (event.key == "Enter"){
+                alreadyChangedBack = true;
+                let newTitle = inputField.value;
+                let changeBackInputField = () => {
+                    titleElement.innerHTML = newTitle;
+                };
+                dataHandler.sendNewColumnTitle(boardId, newTitle, changeBackInputField);
+                event.preventDefault();
+            }
+        });
+    },
     addNewBoard: function(){
         dataHandler.createNewBoard(dom.loadBoards);
     },
@@ -169,9 +182,10 @@ export let dom = {
         this.newBoardEventListener();
         this.newColumnEventListener();
         this.editColumnTitleEventListener();
-        this.deleteBoardEventListener()
+        this.deleteBoardEventListener();
         this.showCardsEventListener();
         this.addNewCardEventListener();
+    },
 
     deleteBoard: function(event){
         let deleteButton = event.currentTarget;
