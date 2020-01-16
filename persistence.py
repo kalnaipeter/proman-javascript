@@ -81,7 +81,9 @@ def get_board(cursor,board_id):
 @database_common.connection_handler
 def get_boards(cursor, force=False):
     cursor.execute("""
-                    SELECT * FROM boards;
+                    SELECT boards.id, boards.title, array_agg(statuses.title) AS columns FROM boards
+                    JOIN statuses ON boards.id = statuses.board_id
+                    GROUP BY boards.id, boards.title
                     """)
     table_data = cursor.fetchall()
     if force or "boards" not in _cache:
@@ -101,7 +103,7 @@ def get_cards(cursor, force=False):
 
 
 @database_common.connection_handler
-def edit_board_title(cursor,board_id,new_title):
+def edit_board_title(cursor, board_id, new_title):
     cursor.execute("""
                     UPDATE boards
                     SET title = %(new_title)s
@@ -113,19 +115,31 @@ def edit_board_title(cursor,board_id,new_title):
 
 @database_common.connection_handler
 def add_new_board(cursor):
+    columns = ['New', 'In Progress', 'Testing', 'Done']
     cursor.execute("""
-                    INSERT INTO boards (title) VALUES ('New Board')
+                        INSERT INTO boards (title) VALUES ('New Board')
+        """)
+    latest_board_id = get_latest_board()
+    for column_title in columns:
+        cursor.execute("""
+                        INSERT INTO statuses (title, board_id) 
+                        VALUES (%(column_title)s, (SELECT id from boards
+                        WHERE boards.id=%(latest_board_id)s));
+                        """,
+                       {"column_title": column_title,
+                        "latest_board_id": latest_board_id})
+
+
+@database_common.connection_handler
+def get_latest_board(cursor):
+    cursor.execute("""
+                    SELECT MAX(id) FROM boards
     """)
 
+    result = cursor.fetchone()
+    board_id = result['max']
+    return board_id
 
-# @database_common.connection_handler
-# def get_latest_board(cursor):
-#     cursor.execute("""
-#                     SELECT MAX(id) FROM boards
-#     """)
-#
-#     board_id = cursor.fetchone()
-#     return board_id['id']
 
 
 @database_common.connection_handler
@@ -148,3 +162,21 @@ def get_hash_from_database(cursor, username):
                    {"username": username})
     hash = cursor.fetchone()
     return hash
+
+
+@database_common.connection_handler
+def create_new_column(cursor, target_board_id):
+    cursor.execute("""
+                    INSERT INTO statuses (title, board_id) VALUES ('New Column', %(target_board_id)s)
+                    """,
+                   {'target_board_id': target_board_id})
+
+
+@database_common.connection_handler
+def delete_board(cursor, board_id):
+    cursor.execute("""
+                    DELETE FROM boards
+                    WHERE id = %(board_id)s;
+    """,
+                   {"board_id": board_id})
+

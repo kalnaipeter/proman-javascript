@@ -57,6 +57,10 @@ export let dataHandler = {
     },
     getStatuses: function (callback) {
         // the statuses are retrieved and then the callback function is called with the statuses
+        this._api_get('/get-statuses', (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getStatus: function (statusId, callback) {
         // the status is retrieved and then the callback function is called with the status
@@ -70,10 +74,17 @@ export let dataHandler = {
     },
     createNewBoard: function (callback) {
         // creates new board, saves it and calls the callback function with its data
-        this._api_post("/add-new-board", callback);
+        this._api_post("/add-new-board",null, callback);
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
+    },
+
+    createNewColumn: function (boardId, callback) {
+        this._api_post("/add-new-column/" + boardId, null, callback);
+    },
+    deleteBoard: function(boardId, callback){
+        this._api_post("/delete-board/"+boardId, null, callback)
     },
 
     sendNewBoardTitle: function (boardId, newTitle, callback) {

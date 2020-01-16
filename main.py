@@ -18,6 +18,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route("/delete-board/<int:board_id>", methods=["POST"])
+@json_response
+def delete_board(board_id: int):
+    data_handler.delete_board(board_id)
+
+
 @app.route("/edit-board-title/<int:board_id>", methods=["POST"])
 @json_response
 def edit_board_title(board_id:int):
@@ -72,6 +78,12 @@ def login_registration():
                 if verify_password:
                     session["username"] = request.form["username"]
                     return redirect(url_for("index"))
+
+@app.route("/add-new-column/<int:board_id>", methods=["POST"])
+@json_response
+def create_new_column(board_id: int):
+    data_handler.create_new_column(board_id)
+
 
 
 def main():

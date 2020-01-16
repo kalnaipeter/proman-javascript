@@ -31,6 +31,11 @@ def get_card_status(status_id):
     return next((status['title'] for status in statuses if status['id'] == str(status_id)), 'Unknown')
 
 
+
+def delete_board(board_id):
+    return persistence.delete_board(board_id)
+
+
 def edit_board_title(board_id,new_title):
     return persistence.edit_board_title(board_id,new_title)
 
@@ -61,3 +66,7 @@ def get_cards_for_board(board_id):
             card['status_id'] = get_card_status(card['status_id'])  # Set textual status for the card
             matching_cards.append(card)
     return matching_cards
+
+
+def create_new_column(board_id):
+    persistence.create_new_column(board_id)
