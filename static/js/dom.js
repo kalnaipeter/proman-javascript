@@ -77,7 +77,7 @@ export let dom = {
     },
     showCard: function(card){
         let statusTitle = card.status_id;
-        let columnTitle = document.querySelector(`[data-title='${statusTitle}']`);
+        let columnTitle = document.querySelector(`[data-columnid='${statusTitle}']`);
         let columnTitleChild = columnTitle.firstElementChild.nextSibling;
         let cardElement = document.createElement("div");
         cardElement.setAttribute("class","card");

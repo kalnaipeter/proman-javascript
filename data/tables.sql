@@ -50,14 +50,13 @@ ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) references statuses(id) ON DELETE CASCADE ;
 
 INSERT INTO boards (title) VALUES
-    ('Teamwork week'),
-    ('Self-instructed week');
+('Self-instructed week'),
+('Teamwork week');
 
 INSERT INTO statuses (title, board_id) VALUES
-('New', 1),
-('In Progress', 1),
-('Testing', 1),
-('Done', 1),
+('Things to do', 1),
+('Things that I am doing', 1),
+('Things I have done', 1),
 ('New', 2),
 ('In Progress', 2),
 ('Testing', 2),

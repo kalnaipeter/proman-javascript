@@ -207,8 +207,7 @@ def delete_board(cursor, board_id):
 def add_new_card(cursor, board_id):
     cursor.execute("""
                     INSERT INTO cards (board_id, title, status_id) 
-                    SELECT %(board_id)s, 'New Card', MIN(statuses.id)
+                    SELECT %(board_id)s, 'New Card', MIN(statuses.id) FILTER (WHERE statuses.board_id = %(board_id)s)
                     FROM statuses
-                    WHERE statuses.board_id = %(board_id)s
     """,
                    {"board_id": board_id})
