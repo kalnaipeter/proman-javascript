@@ -19,21 +19,23 @@ export let dom = {
         // it adds necessary event listeners also
 
         let boardNode = `
-            <div class="board-container">
-                <section class="board">
-                    <div class="board-header"><span class="board-title" data-board="${board.id}">${board.title}</span>
-                        <button class="board-add">Add Card</button>
-                        <button class="board-add column-btn" data-addcolumn="${board.id}">Add Column</button>
-                        <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                    <div class="board-columns" data-columns="${board.id}"></div>
-                </section>
-            </div>`;
+    <div class="board-container">
+        <section class="board">
+            <div class="board-header"><span class="board-title" data-board="${board.id}">${board.title}</span>
+                <button class="board-add">Add Card</button>
+                <button class="board-add column-btn" data-addcolumn="${board.id}">Add New Column</button>
+                <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
+                <button class="delete" data-boardid="${board.id}">Delete Board</button>
+            </div>
+                <div class="board-columns" data-columns="${board.id}"></div>
+         </section>
+     </div>`;
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", boardNode);
         dom.createColumns(board);
     },
+
 
     createColumns: function(board) {
         let columnsContainer = document.querySelector(`[data-columns='${board.id}'`);
@@ -69,7 +71,8 @@ export let dom = {
         columnContainer.appendChild(newColumn);
         dataHandler.createNewColumn(targetBoardID, dom.loadBoards);
     },
-    showBoards: function (boards) {
+
+    showBoards: function(boards){
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.innerHTML = ``;
         for(let board of boards){
@@ -119,11 +122,21 @@ export let dom = {
     addNewBoard: function(){
         dataHandler.createNewBoard(dom.loadBoards);
     },
+
     addEventListeners: function() {
         this.addBoardTitleEventListener();
         this.newBoardEventListener();
         this.newColumnEventListener();
+        this.deleteBoardEventListener()
     },
+
+
+    deleteBoard: function(event){
+        let deleteButton = event.currentTarget;
+        let boardId = deleteButton.dataset.boardid;
+        dataHandler.deleteBoard(boardId, dom.loadBoards);
+    },
+      
     addBoardTitleEventListener: function() {
         let board_title_elements = document.querySelectorAll(".board-title");
         board_title_elements.forEach((element) => {
@@ -134,10 +147,19 @@ export let dom = {
         let newBoardBtn = document.querySelector("#newBoard");
         newBoardBtn.addEventListener('click',  this.addNewBoard)
     },
+      
     newColumnEventListener: function() {
         let newColumnBtn = document.querySelectorAll(".column-btn");
         newColumnBtn.forEach((element) => {
             element.addEventListener('click', this.addNewColumn)
         });
     },
+
+
+    deleteBoardEventListener: function () {
+        let deleteBtnElements = document.querySelectorAll('.delete');
+        deleteBtnElements.forEach((element) => {
+            element.addEventListener('click', this.deleteBoard)
+        });
+    }
 };

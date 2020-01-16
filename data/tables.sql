@@ -32,7 +32,7 @@ ALTER TABLE ONLY boards
 
 ALTER TABLE ONLY statuses
     ADD CONSTRAINT pk_status_id PRIMARY KEY (id),
-    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) references boards(id);
+    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) references boards(id) ON DELETE CASCADE ;
 
 ALTER TABLE ONLY cards
     ADD CONSTRAINT pk_card_id PRIMARY KEY (id),

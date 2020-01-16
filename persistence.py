@@ -146,3 +146,12 @@ def create_new_column(cursor, target_board_id):
                     INSERT INTO statuses (title, board_id) VALUES ('New Column', %(target_board_id)s)
                     """,
                    {'target_board_id': target_board_id})
+
+
+@database_common.connection_handler
+def delete_board(cursor, board_id):
+    cursor.execute("""
+                    DELETE FROM boards
+                    WHERE id = %(board_id)s;
+    """,
+                   {"board_id": board_id})
