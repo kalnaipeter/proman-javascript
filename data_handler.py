@@ -69,3 +69,7 @@ def get_cards_for_board(board_id):
 
 def create_new_column(board_id):
     persistence.create_new_column(board_id)
+
+
+def add_new_card(board_id):
+    return persistence.add_new_card(board_id)
