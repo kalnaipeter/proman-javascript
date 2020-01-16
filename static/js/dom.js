@@ -23,7 +23,7 @@ export let dom = {
                 <section class="board">
                     <div class="board-header"><span class="board-title" data-board="${board.id}">${board.title}</span>
                         <button class="board-add">Add Card</button>
-                        <button class="board-add column-btn" data-addcolumn="${board.id}">Add Column</button>
+                        <button class="board-add column-btn" data-addcolumn="${board.id}">Add New Column</button>
                         <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
                     </div>
                     <div class="board-columns" data-columns="${board.id}"></div>
