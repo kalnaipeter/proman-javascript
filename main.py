@@ -51,6 +51,12 @@ def get_cards_for_board(board_id: int):
     return data_handler.get_cards_for_board(board_id)
 
 
+@app.route("/add-new-column/<int:board_id>", methods=["POST"])
+@json_response
+def create_new_column(board_id: int):
+    data_handler.create_new_column(board_id)
+
+
 def main():
     app.run(debug=True)
 

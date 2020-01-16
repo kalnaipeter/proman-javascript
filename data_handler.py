@@ -41,3 +41,7 @@ def get_cards_for_board(board_id):
             card['status_id'] = get_card_status(card['status_id'])  # Set textual status for the card
             matching_cards.append(card)
     return matching_cards
+
+
+def create_new_column(board_id):
+    persistence.create_new_column(board_id)

@@ -48,4 +48,6 @@ INSERT INTO statuses (title, board_id) VALUES
 ('StatusTitle', 1),
 ('StatusTitle2', 1),
 ('StatusTitle3', 2),
-('StatusTitle4', 2);
+('StatusTitle4', 2),
+('StatusTitle5', 2),
+('StatusTitle6', 2);

@@ -138,3 +138,11 @@ def get_latest_board(cursor):
     result = cursor.fetchone()
     board_id = result['max']
     return board_id
+
+
+@database_common.connection_handler
+def create_new_column(cursor, target_board_id):
+    cursor.execute("""
+                    INSERT INTO statuses (title, board_id) VALUES ('New Column', %(target_board_id)s)
+                    """,
+                   {'target_board_id': target_board_id})
