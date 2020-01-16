@@ -141,7 +141,6 @@ def get_latest_board(cursor):
     return board_id
 
 
-
 @database_common.connection_handler
 def registration(cursor, username, password):
     hashed_bytes = data_handler.get_hash_from_password(password)
