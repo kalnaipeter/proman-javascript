@@ -40,30 +40,29 @@ export let dom = {
 
 
     createColumns: function(board) {
-        let columnsContainer = document.querySelector(`[data-columns='${board.id}'`);
+        let columnsContainer = document.querySelector(`[data-columns='${board.id}']`);
         for (let column of board.columns) {
-            let newColumn = dom.createColumn(board.id, column);
+            let newColumn = dom.createColumn(board.id, column['title'], column['id']);
             columnsContainer.appendChild(newColumn);
         }
     },
 
-    createColumn: function(board_id, columnTitle) {
+    createColumn: function(board_id, columnTitle, columnId) {
             let columnContainer = document.createElement('div');
             columnContainer.setAttribute('class', 'board-column');
-            columnContainer.setAttribute('data-title',columnTitle);
-            columnContainer.setAttribute('data-column', `'${board_id}'`);
             columnContainer.setAttribute('data-column', `${board_id}`);
             columnContainer.setAttribute('data-title', `${columnTitle}`);
+            columnContainer.setAttribute('data-columnId', `${columnId}`);
 
             let titleContainer = document.createElement('div');
             titleContainer.setAttribute('class', 'board-column-title');
-            columnContainer.setAttribute('data-columnTitle', `'${board_id}`);
+            columnContainer.setAttribute('data-columnTitle', `${board_id}`);
             titleContainer.innerHTML = `${columnTitle}`;
             columnContainer.appendChild(titleContainer);
 
             let columnContent = document.createElement('div');
             columnContent.setAttribute('class', 'board-column-content');
-            columnContainer.setAttribute('data-columnContent', `'${board_id}`);
+            columnContainer.setAttribute('data-columnContent', `${board_id}`);
             columnContainer.appendChild(columnContent);
 
             return columnContainer;
