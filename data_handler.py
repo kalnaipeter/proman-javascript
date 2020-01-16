@@ -8,8 +8,7 @@ def get_card_status(status_id):
     :return: str
     """
     statuses = persistence.get_statuses()
-    return next((status['title'] for status in statuses if status['id'] == str(status_id)), 'Unknown')
-
+    return next((status['title'] for status in statuses if status['id'] == status_id), 'Unknown')
 
 def delete_board(board_id):
     return persistence.delete_board(board_id)

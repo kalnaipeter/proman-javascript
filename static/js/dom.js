@@ -34,6 +34,7 @@ export let dom = {
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", boardNode);
         dom.createColumns(board);
+        dom.loadCards(board.id);
     },
 
 
@@ -48,6 +49,8 @@ export let dom = {
     createColumn: function(board_id, columnTitle) {
             let columnContainer = document.createElement('div');
             columnContainer.setAttribute('class', 'board-column');
+            columnContainer.setAttribute('data-title',columnTitle);
+            columnContainer.setAttribute('data-column', `'${board_id}'`);
             columnContainer.setAttribute('data-column', `${board_id}`);
             columnContainer.setAttribute('data-title', `${columnTitle}`);
 
@@ -67,10 +70,22 @@ export let dom = {
     addNewColumn: function (event) {
         let addColumnButton = event.currentTarget;
         let targetBoardID = addColumnButton.dataset.addcolumn;
-        let columnContainer = document.querySelector(`[data-columns=${targetBoardID}`);
+        let columnContainer = document.querySelector(`[data-columns='${targetBoardID}']`);
         let newColumn = dom.createColumn(targetBoardID, 'New Column');
         columnContainer.appendChild(newColumn);
         dataHandler.createNewColumn(targetBoardID, dom.loadBoards);
+    },
+    showCard: function(card){
+        let statusTitle = card.status_id;
+        let columnTitle = document.querySelector(`[data-title='${statusTitle}']`);
+        let columnTitleChild = columnTitle.firstElementChild.nextSibling;
+        let cardElement = document.createElement("div");
+        cardElement.setAttribute("class","card");
+        cardElement.innerHTML = `
+                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                            <div class="card-title">${card.title}</div>
+                        `;
+        columnTitleChild.appendChild(cardElement);
     },
 
     showBoards: function(boards){
@@ -81,36 +96,42 @@ export let dom = {
         }
     },
 
-    loadCards: function (boardId) {
-        // retrieves cards and makes showCards called
-    },
     showCards: function (cards) {
+        for (let card of cards){
+            this.showCard(card)
+        }
         // shows the cards of a board
         // it adds necessary event listeners also
+    },
+
+    loadCards: function (boardId) {
+        dataHandler.getCardsByBoardId(boardId,function (cards) {
+            dom.showCards(cards);
+        })
+        // retrieves cards and makes showCards called
     },
     // here comes more features
     changeBoardTitle: function (event) {
         let titleElement = event.currentTarget;
-        console.log(titleElement);
         let boardTitle = titleElement.innerText;
         let inputField = document.createElement("input");
         let boardId = titleElement.dataset.board;
-        console.log(boardId);
-
+        let alreadyChangedBack = false;
         inputField.setAttribute('value',boardTitle);
+
 
         titleElement.innerHTML = "";
         titleElement.appendChild(inputField);
         inputField.focus();
-        inputField.addEventListener('keyup', (event) => {
-            if(event.key == "Escape"){
+        inputField.addEventListener('blur',(event) => {
+            if (!alreadyChangedBack){
                 titleElement.innerHTML = boardTitle;
-            }
-        });
+            }});
 
 
         inputField.addEventListener('keypress',(event) => {
             if (event.key == "Enter"){
+                alreadyChangedBack = true;
                 let newTitle = inputField.value;
                 let changeBackInputField = () => {
                     titleElement.innerHTML = newTitle;
@@ -153,6 +174,7 @@ export let dom = {
         dataHandler.createNewBoard(dom.loadBoards);
     },
 
+
     addEventListeners: function() {
         this.addBoardTitleEventListener();
         this.newBoardEventListener();
@@ -178,6 +200,14 @@ export let dom = {
         let newBoardBtn = document.querySelector("#newBoard");
         newBoardBtn.addEventListener('click',  this.addNewBoard)
     },
+
+    showCardsEventListener: function () {
+        let showCardsBtn = document.querySelectorAll(".board-data");
+        showCardsBtn.forEach((element) => {
+            element.addEventListener('click',this.loadCards)
+        });
+    },
+
       
     newColumnEventListener: function() {
         let newColumnBtn = document.querySelectorAll(".column-btn");
@@ -199,4 +229,5 @@ export let dom = {
             element.addEventListener('click', this.deleteBoard)
         });
     }
+
 };

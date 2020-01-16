@@ -1,5 +1,6 @@
 # import csv
 import database_common
+import data_handler
 
 # STATUSES_FILE = './data/statuses.csv'
 # BOARDS_FILE = './data/boards.csv'
@@ -90,6 +91,17 @@ def get_boards(cursor, force=False):
     return _cache["boards"]
 
 
+# @database_common.connection_handler
+# def get_cards(cursor, force=False):
+#     cursor.execute("""
+#                     SELECT cards.title as card_title, s.title as status_title, cards.board_id, cards.id FROM cards
+#                     JOIN statuses s on cards.status_id = s.id;
+#                     """)
+#     table_data = cursor.fetchall()
+#     if force or "cards" not in _cache:
+#         _cache["cards"] = table_data
+#     return _cache["cards"]
+
 @database_common.connection_handler
 def get_cards(cursor, force=False):
     cursor.execute("""
@@ -153,6 +165,28 @@ def get_latest_board(cursor):
 
 
 @database_common.connection_handler
+def registration(cursor, username, password):
+    hashed_bytes = data_handler.get_hash_from_password(password)
+    cursor.execute("""
+                    INSERT INTO usertable (username,password)
+                    VALUES (%(username)s,%(hashed_bytes)s);
+                   """,
+                   {"username": username,
+                    "hashed_bytes": hashed_bytes})
+
+
+@database_common.connection_handler
+def get_hash_from_database(cursor, username):
+    cursor.execute("""
+                    SELECT password FROM usertable
+                    WHERE username = %(username)s
+                    """,
+                   {"username": username})
+    hash = cursor.fetchone()
+    return hash
+
+
+@database_common.connection_handler
 def create_new_column(cursor, target_board_id):
     cursor.execute("""
                     INSERT INTO statuses (title, board_id) VALUES ('New Column', %(target_board_id)s)
@@ -165,5 +199,6 @@ def delete_board(cursor, board_id):
     cursor.execute("""
                     DELETE FROM boards
                     WHERE id = %(board_id)s;
-                    """,
+    """,
                    {"board_id": board_id})
+
