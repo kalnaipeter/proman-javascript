@@ -18,13 +18,14 @@ export let dom = {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
 
+
         let boardNode = `
     <div class="board-container">
         <section class="board">
             <div class="board-header"><span class="board-title" data-board="${board.id}">${board.title}</span>
-                <button class="board-add">Add Card</button>
+                <button class="board-add" data-boardid="${board.id}">Add Card</button>
                 <button class="board-add column-btn" data-addcolumn="${board.id}">Add New Column</button>
-                <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
+                <button class="board-toggle board-data" data-boardid="${board.id}"><i class="fas fa-chevron-down"></i></button>
                 <button class="delete" data-boardid="${board.id}">Delete Board</button>
             </div>
                 <div class="board-columns" data-columns="${board.id}"></div>
@@ -56,13 +57,13 @@ export let dom = {
 
             let titleContainer = document.createElement('div');
             titleContainer.setAttribute('class', 'board-column-title');
-            columnContainer.setAttribute('data-columnTitle', `${board_id}`);
+            columnContainer.setAttribute('data-columnTitle', `'${board_id}`);
             titleContainer.innerHTML = `${columnTitle}`;
             columnContainer.appendChild(titleContainer);
 
             let columnContent = document.createElement('div');
             columnContent.setAttribute('class', 'board-column-content');
-            columnContainer.setAttribute('data-columnContent', `${board_id}`);
+            columnContainer.setAttribute('data-columnContent', `'${board_id}`);
             columnContainer.appendChild(columnContent);
 
             return columnContainer;
@@ -158,18 +159,6 @@ export let dom = {
                 titleElement.innerHTML = columnTitle;
             }
         });
-
-        inputField.addEventListener('keypress',(event) => {
-            if (event.key == "Enter"){
-                let newTitle = inputField.value;
-                let changeBackInputField = () => {
-                    titleElement.innerHTML = newTitle;
-                };
-                dataHandler.sendNewColumnTitle(boardId, newTitle, changeBackInputField);
-                event.preventDefault();
-            }
-        });
-    },
     addNewBoard: function(){
         dataHandler.createNewBoard(dom.loadBoards);
     },
@@ -181,13 +170,19 @@ export let dom = {
         this.newColumnEventListener();
         this.editColumnTitleEventListener();
         this.deleteBoardEventListener()
-    },
-
+        this.showCardsEventListener();
+        this.addNewCardEventListener();
 
     deleteBoard: function(event){
         let deleteButton = event.currentTarget;
         let boardId = deleteButton.dataset.boardid;
         dataHandler.deleteBoard(boardId, dom.loadBoards);
+    },
+
+    addNewCard: function(event){
+        let addBtn = event.currentTarget;
+        let boardId = addBtn.dataset.boardid;
+        dataHandler.createNewCard(boardId, dom.loadBoards)
     },
       
     addBoardTitleEventListener: function() {
@@ -227,6 +222,13 @@ export let dom = {
         let deleteBtnElements = document.querySelectorAll('.delete');
         deleteBtnElements.forEach((element) => {
             element.addEventListener('click', this.deleteBoard)
+        });
+    },
+
+    addNewCardEventListener: function () {
+        let addNewCardElements = document.querySelectorAll('.board-add');
+        addNewCardElements.forEach((elemnt) => {
+            elemnt.addEventListener('click', this.addNewCard)
         });
     }
 

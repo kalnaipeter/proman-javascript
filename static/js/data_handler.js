@@ -45,6 +45,7 @@ export let dataHandler = {
         //    if we would use function(){...} here, the value of 'this' would change.
         this._api_get('/get-boards', (response) => {
             this._data = response;
+            console.log(response);
             callback(response);
         });
     },
@@ -65,6 +66,7 @@ export let dataHandler = {
         // the status is retrieved and then the callback function is called with the status
     },
     getCardsByBoardId: function (boardId, callback) {
+        this._api_post('/get-cards/'+boardId,null,callback)
         // the cards are retrieved and then the callback function is called with the cards
     },
     getCard: function (cardId, callback) {
@@ -74,8 +76,8 @@ export let dataHandler = {
         // creates new board, saves it and calls the callback function with its data
         this._api_post("/add-new-board",null, callback);
     },
-    createNewCard: function (cardTitle, boardId, statusId, callback) {
-        // creates new card, saves it and calls the callback function with its data
+    createNewCard: function (boardId, callback) {
+        this._api_post("/add-new-card/"+boardId, null, callback)
     },
 
     createNewColumn: function (boardId, callback) {

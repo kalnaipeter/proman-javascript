@@ -46,8 +46,8 @@ ALTER TABLE ONLY statuses
 
 ALTER TABLE ONLY cards
     ADD CONSTRAINT pk_card_id PRIMARY KEY (id),
-    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) references boards(id),
-    ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) references statuses(id);
+    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) references boards(id) ON DELETE CASCADE ,
+    ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) references statuses(id) ON DELETE CASCADE ;
 
 INSERT INTO boards (title) VALUES
     ('Teamwork week'),

@@ -59,7 +59,7 @@ def clear_cache():
 @database_common.connection_handler
 def get_statuses(cursor, force=False):
     cursor.execute("""
-                    SELECT * FROM statuses;
+                    SELECT * FROM statuses ;
                     """)
     table_data = cursor.fetchall()
     if force or "statuses" not in _cache:
@@ -81,7 +81,8 @@ def get_board(cursor,board_id):
 @database_common.connection_handler
 def get_boards(cursor, force=False):
     cursor.execute("""
-                    SELECT boards.id, boards.title, array_agg(statuses.title) AS columns FROM boards
+                    SELECT boards.id, boards.title, array_agg(statuses.title ORDER BY statuses.id)
+                    AS columns FROM boards
                     JOIN statuses ON boards.id = statuses.board_id
                     GROUP BY boards.id, boards.title
                     """)
@@ -202,3 +203,14 @@ def delete_board(cursor, board_id):
     """,
                    {"board_id": board_id})
 
+
+@database_common.connection_handler
+def add_new_card(cursor, board_id):
+    cursor.execute("""
+                    INSERT INTO cards (board_id, title, status_id) 
+                    SELECT %(board_id)s, 'New Card', statuses.id
+                    FROM statuses
+                    WHERE statuses.board_id = %(board_id)s
+                    LIMIT 1
+    """,
+                   {"board_id": board_id})
