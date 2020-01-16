@@ -115,21 +115,22 @@ export let dom = {
         let boardTitle = titleElement.innerText;
         let inputField = document.createElement("input");
         let boardId = titleElement.dataset.board;
-
+        let alreadyChangedBack = false;
         inputField.setAttribute('value',boardTitle);
+
 
         titleElement.innerHTML = "";
         titleElement.appendChild(inputField);
         inputField.focus();
-        inputField.addEventListener('keyup', (event) => {
-            if(event.key == "Escape"){
+        inputField.addEventListener('blur',(event) => {
+            if (!alreadyChangedBack){
                 titleElement.innerHTML = boardTitle;
-            }
-        });
+            }});
 
 
         inputField.addEventListener('keypress',(event) => {
             if (event.key == "Enter"){
+                alreadyChangedBack = true;
                 let newTitle = inputField.value;
                 let changeBackInputField = () => {
                     titleElement.innerHTML = newTitle;
