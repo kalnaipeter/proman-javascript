@@ -128,6 +128,7 @@ export let dom = {
         this.newBoardEventListener();
         this.newColumnEventListener();
         this.deleteBoardEventListener()
+    },
 
 
     deleteBoard: function(event){
