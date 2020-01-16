@@ -24,6 +24,12 @@ def delete_board(board_id: int):
     data_handler.delete_board(board_id)
 
 
+@app.route("/add-new-card/<int:board_id>", methods=["POST"])
+@json_response
+def add_new_card(board_id: int):
+    data_handler.add_new_card(board_id)
+
+
 @app.route("/edit-board-title/<int:board_id>", methods=["POST"])
 @json_response
 def edit_board_title(board_id:int):

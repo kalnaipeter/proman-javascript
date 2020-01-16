@@ -23,7 +23,7 @@ export let dom = {
     <div class="board-container">
         <section class="board">
             <div class="board-header"><span class="board-title" data-board="${board.id}">${board.title}</span>
-                <button class="board-add">Add Card</button>
+                <button class="board-add" data-boardid="${board.id}">Add Card</button>
                 <button class="board-add column-btn" data-addcolumn="${board.id}">Add New Column</button>
                 <button class="board-toggle board-data" data-boardid="${board.id}"><i class="fas fa-chevron-down"></i></button>
                 <button class="delete" data-boardid="${board.id}">Delete Board</button>
@@ -151,6 +151,7 @@ export let dom = {
         this.newColumnEventListener();
         this.deleteBoardEventListener();
         this.showCardsEventListener();
+        this.addNewCardEventListener();
     },
 
 
@@ -158,6 +159,12 @@ export let dom = {
         let deleteButton = event.currentTarget;
         let boardId = deleteButton.dataset.boardid;
         dataHandler.deleteBoard(boardId, dom.loadBoards);
+    },
+
+    addNewCard: function(event){
+        let addBtn = event.currentTarget;
+        let boardId = addBtn.dataset.boardid;
+        dataHandler.createNewCard(boardId, dom.loadBoards)
     },
       
     addBoardTitleEventListener: function() {
@@ -191,6 +198,13 @@ export let dom = {
         let deleteBtnElements = document.querySelectorAll('.delete');
         deleteBtnElements.forEach((element) => {
             element.addEventListener('click', this.deleteBoard)
+        });
+    },
+
+    addNewCardEventListener: function () {
+        let addNewCardElements = document.querySelectorAll('.board-add');
+        addNewCardElements.forEach((elemnt) => {
+            elemnt.addEventListener('click', this.addNewCard)
         });
     }
 
