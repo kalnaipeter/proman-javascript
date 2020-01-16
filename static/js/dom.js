@@ -13,105 +13,67 @@ export let dom = {
             dom.addEventListeners();
         });
     },
+
     showBoard: function (board) {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
 
         let boardNode = `
-<div class="board-container">
-        <section class="board">
-            <div class="board-header"><span class="board-title" data-board="${board.id}">${board.title}</span>
-                <button class="board-add">Add Card</button>
-                <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
-            </div>
-            <div class="board-columns">
-                <div class="board-column">
-                    <div class="board-column-title">New</div>
-                    <div class="board-column-content">
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 1</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 2</div>
-                        </div>
+            <div class="board-container">
+                <section class="board">
+                    <div class="board-header"><span class="board-title" data-board="${board.id}">${board.title}</span>
+                        <button class="board-add">Add Card</button>
+                        <button class="board-add column-btn" data-addcolumn="${board.id}">Add Column</button>
+                        <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
                     </div>
-                </div>
-                <div class="board-column">
-                    <div class="board-column-title">In Progress</div>
-                    <div class="board-column-content">
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 1</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="board-column">
-                    <div class="board-column-title">Testing</div>
-                    <div class="board-column-content">
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 1</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 2</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 3</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 4</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 5</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="board-column">
-                    <div class="board-column-title">Done</div>
-                    <div class="board-column-content">
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 1</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 2</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 3</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 4</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 5</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">Card 6</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>`;
+                    <div class="board-columns" data-columns="${board.id}"></div>
+                </section>
+            </div>`;
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", boardNode);
+        dom.createColumns(board);
     },
 
-    showBoards: function(boards){
+    createColumns: function(board) {
+        let columnsContainer = document.querySelector(`[data-columns='${board.id}'`);
+        for (let column of board.columns) {
+            let newColumn = dom.createColumn(board.id, column);
+            columnsContainer.appendChild(newColumn);
+        }
+    },
+
+    createColumn: function(board_id, columnTitle) {
+            let columnContainer = document.createElement('div');
+            columnContainer.setAttribute('class', 'board-column');
+            columnContainer.setAttribute('data-column', `'${board_id}'`);
+
+            let titleContainer = document.createElement('div');
+            titleContainer.setAttribute('class', 'board-column-title');
+            columnContainer.setAttribute('data-column-title', `'${board_id}`);
+            titleContainer.innerHTML = `${columnTitle}`;
+            columnContainer.appendChild(titleContainer);
+
+            let columnContent = document.createElement('div');
+            columnContent.setAttribute('class', 'board-column-content');
+            columnContainer.setAttribute('data-column-content', `'${board_id}`);
+            columnContainer.appendChild(columnContent);
+
+            return columnContainer;
+    },
+    addNewColumn: function (event) {
+        let addColumnButton = event.currentTarget;
+        let targetBoardID = addColumnButton.dataset.addcolumn;
+        let columnContainer = document.querySelector(`[data-columns='${targetBoardID}'`);
+        let newColumn = dom.createColumn(targetBoardID, 'New Column');
+        columnContainer.appendChild(newColumn);
+        dataHandler.createNewColumn(targetBoardID, dom.loadBoards);
+    },
+    showBoards: function (boards) {
+        let boardsContainer = document.querySelector('#boards');
+        boardsContainer.innerHTML = ``;
         for(let board of boards){
-            this.showBoard(board)
+            this.showBoard(board);
         }
     },
 
@@ -155,16 +117,12 @@ export let dom = {
         });
     },
     addNewBoard: function(){
-        dataHandler.createNewBoard(dom.loadBoards());
+        dataHandler.createNewBoard(dom.loadBoards);
     },
-
-
-
-
-
     addEventListeners: function() {
         this.addBoardTitleEventListener();
         this.newBoardEventListener();
+        this.newColumnEventListener();
     },
     addBoardTitleEventListener: function() {
         let board_title_elements = document.querySelectorAll(".board-title");
@@ -175,5 +133,11 @@ export let dom = {
     newBoardEventListener: function () {
         let newBoardBtn = document.querySelector("#newBoard");
         newBoardBtn.addEventListener('click',  this.addNewBoard)
-    }
+    },
+    newColumnEventListener: function() {
+        let newColumnBtn = document.querySelectorAll(".column-btn");
+        newColumnBtn.forEach((element) => {
+            element.addEventListener('click', this.addNewColumn)
+        });
+    },
 };
