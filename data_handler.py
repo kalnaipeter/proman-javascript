@@ -39,6 +39,10 @@ def edit_board_title(board_id,new_title):
     return persistence.edit_board_title(board_id,new_title)
 
 
+def edit_column_title(column_id, new_title):
+    return persistence.edit_column_title(column_id, new_title)
+
+
 def get_board(board_id):
     return persistence.get_board(board_id)
 
@@ -62,7 +66,6 @@ def get_cards_for_board(board_id):
     matching_cards = []
     for card in all_cards:
         if card['board_id'] == board_id:
-            card['status_id'] = get_card_status(card['status_id'])  # Set textual status for the card
             matching_cards.append(card)
     return matching_cards
 

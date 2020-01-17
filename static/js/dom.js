@@ -40,28 +40,29 @@ export let dom = {
 
 
     createColumns: function(board) {
-        let columnsContainer = document.querySelector(`[data-columns='${board.id}'`);
+        let columnsContainer = document.querySelector(`[data-columns='${board.id}']`);
         for (let column of board.columns) {
-            let newColumn = dom.createColumn(board.id, column);
+            let newColumn = dom.createColumn(board.id, column['title'], column['id']);
             columnsContainer.appendChild(newColumn);
         }
     },
 
-    createColumn: function(board_id, columnTitle) {
+    createColumn: function(board_id, columnTitle, columnId) {
             let columnContainer = document.createElement('div');
             columnContainer.setAttribute('class', 'board-column');
-            columnContainer.setAttribute('data-title',columnTitle);
-            columnContainer.setAttribute('data-column', `'${board_id}'`);
+            columnContainer.setAttribute('data-column', `${board_id}`);
+            columnContainer.setAttribute('data-title', `${columnTitle}`);
+            columnContainer.setAttribute('data-columnid', `${columnId}`);
 
             let titleContainer = document.createElement('div');
             titleContainer.setAttribute('class', 'board-column-title');
-            columnContainer.setAttribute('data-columnTitle', `'${board_id}`);
+            columnContainer.setAttribute('data-columnTitle', `${board_id}`);
             titleContainer.innerHTML = `${columnTitle}`;
             columnContainer.appendChild(titleContainer);
 
             let columnContent = document.createElement('div');
             columnContent.setAttribute('class', 'board-column-content');
-            columnContainer.setAttribute('data-columnContent', `'${board_id}`);
+            columnContainer.setAttribute('data-columnContent', `${board_id}`);
             columnContainer.appendChild(columnContent);
 
             return columnContainer;
@@ -76,7 +77,7 @@ export let dom = {
     },
     showCard: function(card){
         let statusTitle = card.status_id;
-        let columnTitle = document.querySelector(`[data-title='${statusTitle}']`);
+        let columnTitle = document.querySelector(`[data-columnid='${statusTitle}']`);
         let columnTitleChild = columnTitle.firstElementChild.nextSibling;
         let cardElement = document.createElement("div");
         cardElement.setAttribute("class","card");
@@ -118,7 +119,6 @@ export let dom = {
         let alreadyChangedBack = false;
         inputField.setAttribute('value',boardTitle);
 
-
         titleElement.innerHTML = "";
         titleElement.appendChild(inputField);
         inputField.focus();
@@ -140,6 +140,37 @@ export let dom = {
             }
         });
     },
+    changeColumnTitle: function (event) {
+        let titleElement = event.currentTarget;
+        let columnTitle = titleElement.innerText;
+        let inputField = document.createElement("input");
+        let titleContainer = event.currentTarget.parentNode;
+        let columnId = titleContainer.dataset.columnid.replace("'","");
+        columnId = columnId.replace("'","");
+        let alreadyChangedBack = false;
+        inputField.setAttribute('value', columnTitle);
+
+        titleElement.innerHTML = "";
+        titleElement.appendChild(inputField);
+        inputField.focus();
+        inputField.addEventListener('blur',(event) => {
+            if (!alreadyChangedBack){
+                titleElement.innerHTML = columnTitle;
+            }
+        });
+
+        inputField.addEventListener('keypress',(event) => {
+            if (event.key == "Enter"){
+                alreadyChangedBack = true;
+                let newTitle = inputField.value;
+                let changeBackInputField = () => {
+                    titleElement.innerHTML = newTitle;
+                };
+                dataHandler.sendNewColumnTitle(columnId, newTitle, changeBackInputField);
+                event.preventDefault();
+            }
+        });
+    },
     addNewBoard: function(){
         dataHandler.createNewBoard(dom.loadBoards);
     },
@@ -149,11 +180,11 @@ export let dom = {
         this.addBoardTitleEventListener();
         this.newBoardEventListener();
         this.newColumnEventListener();
+        this.editColumnTitleEventListener();
         this.deleteBoardEventListener();
         this.showCardsEventListener();
         this.addNewCardEventListener();
     },
-
 
     deleteBoard: function(event){
         let deleteButton = event.currentTarget;
@@ -193,6 +224,12 @@ export let dom = {
         });
     },
 
+    editColumnTitleEventListener: function() {
+        let columnTitleElements = document.querySelectorAll(".board-column-title");
+        columnTitleElements.forEach((element) => {
+            element.addEventListener('dblclick', this.changeColumnTitle)
+        });
+    },
 
     deleteBoardEventListener: function () {
         let deleteBtnElements = document.querySelectorAll('.delete');
