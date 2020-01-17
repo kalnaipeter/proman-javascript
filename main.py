@@ -83,13 +83,13 @@ def login_registration():
                                                               database_password["password"])
                 if verify_password:
                     session["username"] = request.form["username"]
-                    return redirect(url_for("index"))
+            return redirect(url_for("index"))
+
 
 @app.route("/add-new-column/<int:board_id>", methods=["POST"])
 @json_response
 def create_new_column(board_id: int):
     data_handler.create_new_column(board_id)
-
 
 
 def main():
