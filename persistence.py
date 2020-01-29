@@ -81,7 +81,8 @@ def get_board(cursor,board_id):
 @database_common.connection_handler
 def get_boards(cursor, force=False):
     cursor.execute("""
-                    SELECT boards.id, boards.title, array_agg(json_build_object('title', statuses.title, 'id', statuses.id) order by statuses.id) AS columns FROM boards
+                    SELECT boards.id, boards.title, array_agg(json_build_object('title', statuses.title, 'id', statuses.id)
+                    order by statuses.id) AS columns FROM boards
                     JOIN statuses ON boards.id = statuses.board_id
                     GROUP BY boards.id, boards.title
                     """)
