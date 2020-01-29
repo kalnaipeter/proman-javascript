@@ -68,12 +68,12 @@ def get_statuses(cursor, force=False):
 
 
 @database_common.connection_handler
-def get_board(cursor,board_id):
+def get_board(cursor, board_id):
     cursor.execute("""
                     SELECT * FROM boards
                     WHERE id = %(board_id)s;
                     """,
-                   {"board_id":board_id})
+                   {"board_id": board_id})
     board = cursor.fetchone()
     return board
 
@@ -121,8 +121,8 @@ def edit_board_title(cursor, board_id, new_title):
                     SET title = %(new_title)s
                     WHERE id = %(board_id)s;
                     """,
-                   {"board_id":board_id,
-                    "new_title":new_title})
+                   {"board_id": board_id,
+                    "new_title": new_title})
 
 
 @database_common.connection_handler

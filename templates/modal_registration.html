@@ -8,7 +8,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <form name="login" action="/login-registration" method="post">
+        <form name="registration" action="/login-registration" onsubmit="return validateForm()" method="post">
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <i class="fas fa-user"></i>
@@ -30,3 +30,17 @@
     </div>
   </div>
 </div>
+<script>
+function validateForm() {
+  let x = document.forms["registration"]["username"].value;
+  let y = document.forms["registration"]["password"].value;
+  if (x == "") {
+    alert("Name must be filled out");
+    return false;
+  }
+  else if (y == ""){
+      alert("Password field must be filled out");
+      return false;
+  }
+}
+</script>
