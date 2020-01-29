@@ -8,9 +8,9 @@ export let dom = {
 
     loadBoards: function () {
         // retrieves boards and makes showBoards called
-        dataHandler.getBoards(function(boards){
-            dom.showBoards(boards);
-            window.addEventListener('load', dom.addEventListeners);
+        dataHandler.getBoards(async function(boards){
+            await dom.showBoards(boards);
+            dom.addEventListeners();
         });
     },
 
@@ -96,7 +96,7 @@ export let dom = {
     showBoards: function(boards){
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.innerHTML = ``;
-        for(let board of boards){
+        for(let board of boards) {
             this.showBoard(board);
         }
     },
@@ -212,14 +212,14 @@ export let dom = {
 
 
     addEventListeners: function() {
-        dom.addBoardTitleEventListener();
-        dom.newBoardEventListener();
-        dom.newColumnEventListener();
-        dom.editColumnTitleEventListener();
-        dom.editCardTitleEventListener();
-        dom.deleteBoardEventListener();
-        dom.showCardsEventListener();
-        dom.addNewCardEventListener();
+        this.addBoardTitleEventListener();
+        this.newBoardEventListener();
+        this.newColumnEventListener();
+        this.editColumnTitleEventListener();
+        this.editCardTitleEventListener();
+        this.deleteBoardEventListener();
+        this.showCardsEventListener();
+        this.addNewCardEventListener();
     },
 
     deleteBoard: function(event){
