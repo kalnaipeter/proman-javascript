@@ -111,14 +111,8 @@ export let dom = {
         // retrieves cards and makes showCards called
     },
     // here comes more features
-    changeBoardTitle: function (event) {
-        let titleElement = event.currentTarget;
-        let boardTitle = titleElement.innerText;
-        let inputField = document.createElement("input");
-        let boardId = titleElement.dataset.board;
-        let alreadyChangedBack = false;
+    changeTitle: function(inputField,boardTitle,titleElement,alreadyChangedBack,boardId){
         inputField.setAttribute('value', boardTitle);
-
         titleElement.innerHTML = "";
         titleElement.appendChild(inputField);
         inputField.focus();
@@ -127,8 +121,6 @@ export let dom = {
                 titleElement.innerHTML = boardTitle;
             }
         });
-
-
         inputField.addEventListener('keypress', (event) => {
             if (event.key === "Enter") {
                 alreadyChangedBack = true;
@@ -141,6 +133,15 @@ export let dom = {
             }
         });
     },
+
+    changeBoardTitle: function (event) {
+        let titleElement = event.currentTarget;
+        let boardTitle = titleElement.innerText;
+        let inputField = document.createElement("input");
+        let boardId = titleElement.dataset.board;
+        let alreadyChangedBack = false;
+        dom.changeTitle(inputField,boardTitle,titleElement,alreadyChangedBack,boardId)
+    },
     changeColumnTitle: function (event) {
         let titleElement = event.currentTarget;
         let columnTitle = titleElement.innerText;
@@ -149,29 +150,9 @@ export let dom = {
         let columnId = titleContainer.dataset.columnid.replace("'", "");
         columnId = columnId.replace("'", "");
         let alreadyChangedBack = false;
-        inputField.setAttribute('value', columnTitle);
-
-        titleElement.innerHTML = "";
-        titleElement.appendChild(inputField);
-        inputField.focus();
-        inputField.addEventListener('blur', (event) => {
-            if (!alreadyChangedBack) {
-                titleElement.innerHTML = columnTitle;
-            }
-        });
-
-        inputField.addEventListener('keypress', (event) => {
-            if (event.key == "Enter") {
-                alreadyChangedBack = true;
-                let newTitle = inputField.value;
-                let changeBackInputField = () => {
-                    titleElement.innerHTML = newTitle;
-                };
-                dataHandler.sendNewColumnTitle(columnId, newTitle, changeBackInputField);
-                event.preventDefault();
-            }
-        });
+        dom.changeTitle(inputField,columnTitle,titleElement,alreadyChangedBack,columnId)
     },
+    
     addNewBoard: function () {
         dataHandler.createNewBoard(dom.loadBoards);
     },
