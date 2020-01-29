@@ -81,7 +81,8 @@ def get_board(cursor, board_id):
 @database_common.connection_handler
 def get_boards(cursor, force=False):
     cursor.execute("""
-                    SELECT boards.id, boards.title, array_agg(json_build_object('title', statuses.title, 'id', statuses.id) order by statuses.id) AS columns FROM boards
+                    SELECT boards.id, boards.title, array_agg(json_build_object('title', statuses.title, 'id', statuses.id)
+                    order by statuses.id) AS columns FROM boards
                     JOIN statuses ON boards.id = statuses.board_id
                     GROUP BY boards.id, boards.title
                     """)
@@ -211,3 +212,13 @@ def add_new_card(cursor, board_id):
                     FROM statuses
     """,
                    {"board_id": board_id})
+
+
+@database_common.connection_handler
+def delete_card(cursor, card_id):
+    cursor.execute("""
+                    DELETE FROM cards
+                    WHERE id = %(card_id)s;
+                    """,
+                   {'card_id': card_id})
+

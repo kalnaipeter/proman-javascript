@@ -19,7 +19,6 @@ export let dataHandler = {
     _api_post: function (url, data, callback) {
         // it is not called from outside
         // sends the data to the API, and calls callback function
-        console.log(JSON.stringify(data));
         fetch(url, {
             method: 'POST',
             body: JSON.stringify(data),
@@ -30,7 +29,6 @@ export let dataHandler = {
         })
         .then(response => response.json())  // parse the response as JSON
         .then(json_response => {
-            console.log(json_response);
             if (callback) {
                 callback(json_response)
             }
@@ -45,7 +43,6 @@ export let dataHandler = {
         //    if we would use function(){...} here, the value of 'this' would change.
         this._api_get('/get-boards', (response) => {
             this._data = response;
-            console.log(response);
             callback(response);
         });
     },
@@ -91,8 +88,10 @@ export let dataHandler = {
       this._api_post("/edit-board-title/"+boardId, {'new_title': newTitle}, callback);
     },
     sendNewColumnTitle: function (columnId, newTitle, callback) {
-        console.log(newTitle);
         this._api_post("/edit-column-title/"+columnId, {'new_title': newTitle}, callback);
+    },
+    deleteCard: function (cardId, callback) {
+        this._api_post("/delete-card/"+cardId, null, callback)
     }
     // here comes more features
 };

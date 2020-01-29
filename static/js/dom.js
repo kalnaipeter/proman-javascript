@@ -28,7 +28,7 @@ export let dom = {
                 <button class="board-toggle board-data" data-boardid="${board.id}"><i class="fas fa-chevron-down"></i></button>
                 <button class="delete" data-boardid="${board.id}">Delete Board</button>
             </div>
-                <div class="board-columns hide" data-columns="${board.id}"></div>
+                <div class="board-columns" data-columns="${board.id}"></div>
          </section>
      </div>`;
 
@@ -82,7 +82,7 @@ export let dom = {
         let cardElement = document.createElement("div");
         cardElement.setAttribute("class", "card");
         cardElement.innerHTML = `
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                            <div class="card-remove" data-card="${card.id}"><i class="fas fa-trash-alt"></i></div>
                             <div class="card-title">${card.title}</div>
                         `;
         columnTitleChild.appendChild(cardElement);
@@ -195,12 +195,20 @@ export let dom = {
         this.deleteBoardEventListener();
         this.showCardsEventListener();
         this.addNewCardEventListener();
+        this.deleteCardEventListener();
     },
 
     deleteBoard: function (event) {
         let deleteButton = event.currentTarget;
         let boardId = deleteButton.dataset.boardid;
         dataHandler.deleteBoard(boardId, dom.loadBoards);
+    },
+
+    deleteCard: function (event){
+        let deleteCardBtn = event.currentTarget;
+        let cardId = deleteCardBtn.dataset.card;
+        console.log(cardId);
+        dataHandler.deleteCard(cardId, dom.loadBoards);
     },
 
     addNewCard: function (event) {
@@ -247,6 +255,13 @@ export let dom = {
         deleteBtnElements.forEach((element) => {
             element.addEventListener('click', this.deleteBoard)
         });
+    },
+
+    deleteCardEventListener: function(){
+        let deleteBtnElements = document.querySelectorAll('.card-remove');
+        for (const btn of deleteBtnElements){
+            btn.addEventListener('click', this.deleteCard)
+        }
     },
 
     addNewCardEventListener: function () {

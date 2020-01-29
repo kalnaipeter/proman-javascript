@@ -18,6 +18,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route("/delete-card/<int:card_id>", methods=["POST"])
+@json_response
+def delete_card(card_id: int):
+    data_handler.delete_card(card_id)
+
+
 @app.route("/delete-board/<int:board_id>", methods=["POST"])
 @json_response
 def delete_board(board_id: int):

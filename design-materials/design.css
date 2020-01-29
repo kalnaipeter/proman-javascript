@@ -1,9 +1,9 @@
 :root{
     --border-radius: 3px;
-    --status-1: #590000;
-    --status-2: #594300;
-    --status-3: #525900;
-    --status-4: #085900;
+    --status-1: #52272c;
+    --status-2: #592d00;
+    --status-3: #797a00;
+    --status-4: #1a712b;
 }
 
 body{
