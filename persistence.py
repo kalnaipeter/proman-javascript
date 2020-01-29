@@ -212,3 +212,13 @@ def add_new_card(cursor, board_id):
                     FROM statuses
     """,
                    {"board_id": board_id})
+
+
+@database_common.connection_handler
+def delete_card(cursor, card_id):
+    cursor.execute("""
+                    DELETE FROM cards
+                    WHERE id = %(card_id)s;
+                    """,
+                   {'card_id': card_id})
+

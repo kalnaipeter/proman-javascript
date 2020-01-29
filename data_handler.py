@@ -35,12 +35,16 @@ def delete_board(board_id):
     return persistence.delete_board(board_id)
 
 
-def edit_board_title(board_id,new_title):
+def edit_board_title(board_id, new_title):
     return persistence.edit_board_title(board_id,new_title)
 
 
 def edit_column_title(column_id, new_title):
     return persistence.edit_column_title(column_id, new_title)
+
+
+def delete_card(card_id):
+    return persistence.delete_card(card_id)
 
 
 def get_board(board_id):

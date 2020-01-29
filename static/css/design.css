@@ -1,15 +1,15 @@
 :root{
     --border-radius: 3px;
-    --status-1: #590000;
-    --status-2: #594300;
-    --status-3: #525900;
-    --status-4: #085900;
+    --status-1: #590025;
+    --status-2: #593000;
+    --status-3: #666f0f;
+    --status-4: #0c824c;
 }
 
 body{
     min-width: 620px;
-    background: #ddd url(http://cdn.backgroundhost.com/backgrounds/subtlepatterns/diagonal-noise.png);
-    font-family: sans-serif;
+    background: #ddd url(http://getwallpapers.com/wallpaper/full/a/1/0/541192.jpg#.XjGHKYRyqeY.link) no-repeat;
+    background-size: cover;
 }
 
 h1, .board-title, .board-column-title{
@@ -18,13 +18,14 @@ h1, .board-title, .board-column-title{
 
 h1{
     text-align: center;
+    color: white;
     font-size: 4em;
     letter-spacing: 5px;
     transform: scale(1.2, 1);
 }
 
 button{
-    background: #222;
+    background: #270013;
     color: #fff;
     border: none;
     font-size: 14px;
@@ -39,20 +40,21 @@ button{
 
 section.board{
     margin: 20px;
-    border: aliceblue;
-    background: #ffffff90;
+    border: mediumpurple;
+    background: rgba(0, 0, 0, 0.82);
     border-radius: 3px;
 }
 
 .board-header{
     height: 50px;
-    background: #fff;
+    background: #631a30;
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .board-title{
     margin: 13px;
     display: inline-block;
+    color: white;
     font-size: 20px;
 }
 .board-title, .board-add, .board-toggle .delete{
@@ -88,6 +90,7 @@ section.board{
 
 .board-column-title{
     text-align: center;
+    color: white;
 }
 
 .card{
@@ -130,4 +133,26 @@ section.board{
 
 .hide{
     display: none;
+}
+
+.navbar.navbar-expand-lg.navbar-light.bg-light {
+    background-color: #350f1b52!important;
+}
+
+.navbar-light .navbar-brand {
+    color: rgb(255, 255, 255)!important;
+}
+
+.navbar-light .navbar-nav .active>.nav-link {
+    color: rgb(255, 255, 255)!important;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgb(255, 255, 255)!important;
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: #8c0242 !important;
+    border-color: #8c1841 !important;
 }
