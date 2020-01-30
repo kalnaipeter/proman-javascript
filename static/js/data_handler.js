@@ -91,12 +91,10 @@ export let dataHandler = {
       this._api_post("/edit-board-title/"+boardId, {'new_title': newTitle}, callback);
     },
     sendNewColumnTitle: function (columnId, newTitle, callback) {
-        console.log(newTitle);
         this._api_post("/edit-column-title/"+columnId, {'new_title': newTitle}, callback);
     },
     sendNewCardTitle: function (cardId, newTitle, callback) {
-        console.log(newTitle);
-        this._api_post("/edit-column-title/"+cardId, {'new_title': newTitle}, callback);
+        this._api_post("/edit-card-title/"+cardId, {'new_title': newTitle}, callback);
     }
     // here comes more features
 };

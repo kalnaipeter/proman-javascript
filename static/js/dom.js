@@ -91,6 +91,7 @@ export let dom = {
         cardElement.appendChild(cardTitle);
         cardElement.appendChild(cardRemove);
         columnTitleChild.appendChild(cardElement);
+        cardElement.querySelector('.card-title').addEventListener('dblclick', this.changeCardTitle);
     },
 
     showBoards: function(boards){
@@ -147,7 +148,7 @@ export let dom = {
     },
     changeColumnTitle: function (event) {
         let titleElement = event.currentTarget;
-        let columnTitle = CardtitleElement.innerText;
+        let columnTitle = titleElement.innerText;
         let inputField = document.createElement("input");
         let titleContainer = event.currentTarget.parentNode;
         let columnId = titleContainer.dataset.columnid.replace("'","");
@@ -201,6 +202,7 @@ export let dom = {
                 let changeBackInputField = () => {
                     titleElement.innerHTML = newTitle;
                 };
+
                 dataHandler.sendNewCardTitle(cardId, newTitle, changeBackInputField);
                 event.preventDefault();
             }
@@ -216,7 +218,7 @@ export let dom = {
         this.newBoardEventListener();
         this.newColumnEventListener();
         this.editColumnTitleEventListener();
-        this.editCardTitleEventListener();
+        // this.editCardTitleEventListener();
         this.deleteBoardEventListener();
         this.showCardsEventListener();
         this.addNewCardEventListener();
@@ -267,14 +269,14 @@ export let dom = {
         });
     },
 
-    editCardTitleEventListener: function() {
-        let cardTitleElements = document.querySelectorAll(".card-title");
-        console.log(cardTitleElements);
-        cardTitleElements.forEach((element) => {
-            console.log('fuck e:', );
-            element.addEventListener('dblclick', this.changeCardTitle)
-        });
-    },
+    // editCardTitleEventListener: function() {
+    //     let cardTitleElements = document.querySelectorAll(".card-title");
+    //     console.log(cardTitleElements);
+    //     cardTitleElements.forEach((element) => {
+    //         console.log('fuck e:', );
+    //         element.addEventListener('dblclick', this.changeCardTitle)
+    //     });
+    // },
 
     deleteBoardEventListener: function () {
         let deleteBtnElements = document.querySelectorAll('.delete');

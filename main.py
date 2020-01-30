@@ -45,6 +45,7 @@ def edit_column_title(column_id:int):
 @app.route("/edit-card-title/<int:card_id>", methods=["POST"])
 @json_response
 def edit_card_title(card_id:int):
+    print(card_id, 'MMMMMMMMMMMMMMMMMMMMMMM')
     data_handler.edit_card_title(card_id, request.json["new_title"])
 
 
@@ -97,11 +98,11 @@ def login_registration():
                     session["username"] = request.form["username"]
                     return redirect(url_for("index"))
 
+
 @app.route("/add-new-column/<int:board_id>", methods=["POST"])
 @json_response
 def create_new_column(board_id: int):
     data_handler.create_new_column(board_id)
-
 
 
 def main():

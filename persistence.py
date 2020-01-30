@@ -138,11 +138,10 @@ def edit_column_title(cursor, column_id, new_title):
 
 @database_common.connection_handler
 def edit_card_title(cursor, card_id, new_title):
-    print(new_title)
     cursor.execute("""
-                    UPDATE statuses
+                    UPDATE cards
                     SET title = %(new_title)s
-                    WHERE statuses.id = %(card_id)s;
+                    WHERE cards.id = %(card_id)s;
                     """,
                    {"card_id": card_id,
                     "new_title": new_title})
