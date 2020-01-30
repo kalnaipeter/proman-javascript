@@ -18,6 +18,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route("/delete-card/<int:card_id>", methods=["POST"])
+@json_response
+def delete_card(card_id: int):
+    data_handler.delete_card(card_id)
+
+
 @app.route("/delete-board/<int:board_id>", methods=["POST"])
 @json_response
 def delete_board(board_id: int):
@@ -96,7 +102,8 @@ def login_registration():
                                                               database_password["password"])
                 if verify_password:
                     session["username"] = request.form["username"]
-                    return redirect(url_for("index"))
+            return redirect(url_for("index"))
+
 
 
 @app.route("/add-new-column/<int:board_id>", methods=["POST"])

@@ -1,5 +1,5 @@
 // It uses data_handler.js to visualize elements
-import { dataHandler } from "./data_handler.js";
+import {dataHandler} from "./data_handler.js";
 
 export let dom = {
     init: function () {
@@ -8,8 +8,8 @@ export let dom = {
 
     loadBoards: function () {
         // retrieves boards and makes showBoards called
-        dataHandler.getBoards(async function(boards){
-            await dom.showBoards(boards);
+        dataHandler.getBoards(function (boards) {
+            dom.showBoards(boards);
             dom.addEventListeners();
         });
     },
@@ -38,7 +38,7 @@ export let dom = {
     },
 
 
-    createColumns: function(board) {
+    createColumns: function (board) {
         let columnsContainer = document.querySelector(`[data-columns='${board.id}']`);
         for (let column of board.columns) {
             let newColumn = dom.createColumn(board.id, column['title'], column['id']);
@@ -47,25 +47,25 @@ export let dom = {
         dom.loadCards(board.id);
     },
 
-    createColumn: function(board_id, columnTitle, columnId) {
-            let columnContainer = document.createElement('div');
-            columnContainer.setAttribute('class', 'board-column');
-            columnContainer.setAttribute('data-column', `${board_id}`);
-            columnContainer.setAttribute('data-title', `${columnTitle}`);
-            columnContainer.setAttribute('data-columnid', `${columnId}`);
+    createColumn: function (board_id, columnTitle, columnId) {
+        let columnContainer = document.createElement('div');
+        columnContainer.setAttribute('class', 'board-column');
+        columnContainer.setAttribute('data-column', `${board_id}`);
+        columnContainer.setAttribute('data-title', `${columnTitle}`);
+        columnContainer.setAttribute('data-columnid', `${columnId}`);
 
-            let titleContainer = document.createElement('div');
-            titleContainer.setAttribute('class', 'board-column-title');
-            columnContainer.setAttribute('data-columnTitle', `${board_id}`);
-            titleContainer.innerHTML = `${columnTitle}`;
-            columnContainer.appendChild(titleContainer);
+        let titleContainer = document.createElement('div');
+        titleContainer.setAttribute('class', 'board-column-title');
+        columnContainer.setAttribute('data-columnTitle', `${board_id}`);
+        titleContainer.innerHTML = `${columnTitle}`;
+        columnContainer.appendChild(titleContainer);
 
-            let columnContent = document.createElement('div');
-            columnContent.setAttribute('class', 'board-column-content');
-            columnContainer.setAttribute('data-columnContent', `${board_id}`);
-            columnContainer.appendChild(columnContent);
+        let columnContent = document.createElement('div');
+        columnContent.setAttribute('class', 'board-column-content');
+        columnContainer.setAttribute('data-columnContent', `${board_id}`);
+        columnContainer.appendChild(columnContent);
 
-            return columnContainer;
+        return columnContainer;
     },
     addNewColumn: function (event) {
         let addColumnButton = event.currentTarget;
@@ -75,7 +75,7 @@ export let dom = {
         columnContainer.appendChild(newColumn);
         dataHandler.createNewColumn(targetBoardID, dom.loadBoards);
     },
-    showCard: function(card){
+    showCard: function (card) {
         let statusTitle = card.status_id;
         let columnTitle = document.querySelector(`[data-columnid='${statusTitle}']`);
         let columnTitleChild = columnTitle.firstElementChild.nextSibling;
@@ -83,6 +83,7 @@ export let dom = {
         cardElement.setAttribute("class","card");
         let cardRemove = document.createElement("div");
         cardRemove.setAttribute("class","card-remove");
+        cardRemove.dataset.cardid = `${card.id}`;
         cardRemove.innerHTML = `<i class="fas fa-trash-alt"></i>`;
         let cardTitle = document.createElement("div");
         cardTitle.setAttribute("class","card-title");
@@ -92,9 +93,10 @@ export let dom = {
         cardElement.appendChild(cardRemove);
         columnTitleChild.appendChild(cardElement);
         cardElement.querySelector('.card-title').addEventListener('dblclick', this.changeCardTitle);
+        cardRemove.addEventListener('click', this.deleteCard);
     },
 
-    showBoards: function(boards){
+    showBoards: function (boards) {
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.innerHTML = ``;
         for(let board of boards) {
@@ -103,7 +105,7 @@ export let dom = {
     },
 
     showCards: function (cards) {
-        for (let card of cards){
+        for (let card of cards) {
             this.showCard(card)
         }
         // shows the cards of a board
@@ -111,7 +113,7 @@ export let dom = {
     },
 
     loadCards: function (boardId) {
-        dataHandler.getCardsByBoardId(boardId,function (cards) {
+        dataHandler.getCardsByBoardId(boardId, function (cards) {
             dom.showCards(cards);
         })
         // retrieves cards and makes showCards called
@@ -123,19 +125,20 @@ export let dom = {
         let inputField = document.createElement("input");
         let boardId = titleElement.dataset.board;
         let alreadyChangedBack = false;
-        inputField.setAttribute('value',boardTitle);
+        inputField.setAttribute('value', boardTitle);
 
         titleElement.innerHTML = "";
         titleElement.appendChild(inputField);
         inputField.focus();
-        inputField.addEventListener('blur',(event) => {
-            if (!alreadyChangedBack){
+        inputField.addEventListener('blur', (event) => {
+            if (!alreadyChangedBack) {
                 titleElement.innerHTML = boardTitle;
-            }});
+            }
+        });
 
 
-        inputField.addEventListener('keypress',(event) => {
-            if (event.key == "Enter"){
+        inputField.addEventListener('keypress', (event) => {
+            if (event.key === "Enter") {
                 alreadyChangedBack = true;
                 let newTitle = inputField.value;
                 let changeBackInputField = () => {
@@ -151,22 +154,22 @@ export let dom = {
         let columnTitle = titleElement.innerText;
         let inputField = document.createElement("input");
         let titleContainer = event.currentTarget.parentNode;
-        let columnId = titleContainer.dataset.columnid.replace("'","");
-        columnId = columnId.replace("'","");
+        let columnId = titleContainer.dataset.columnid.replace("'", "");
+        columnId = columnId.replace("'", "");
         let alreadyChangedBack = false;
         inputField.setAttribute('value', columnTitle);
 
         titleElement.innerHTML = "";
         titleElement.appendChild(inputField);
         inputField.focus();
-        inputField.addEventListener('blur',(event) => {
-            if (!alreadyChangedBack){
+        inputField.addEventListener('blur', (event) => {
+            if (!alreadyChangedBack) {
                 titleElement.innerHTML = columnTitle;
             }
         });
 
-        inputField.addEventListener('keypress',(event) => {
-            if (event.key == "Enter"){
+        inputField.addEventListener('keypress', (event) => {
+            if (event.key == "Enter") {
                 alreadyChangedBack = true;
                 let newTitle = inputField.value;
                 let changeBackInputField = () => {
@@ -212,31 +215,46 @@ export let dom = {
         dataHandler.createNewBoard(dom.loadBoards);
     },
 
+    showAndHideCards: function(event){
+        let Btn = event.currentTarget;
+        let BoardId = Btn.dataset.boardid;
+        let block = document.querySelector(`[data-columns='${BoardId}']`);
+        if (block.classList[1] === "hide") {
+            block.classList.remove('hide');
+        } else {
+            block.classList.add('hide');
+}
+    },
 
-    addEventListeners: function() {
+    addEventListeners: function () {
         this.addBoardTitleEventListener();
         this.newBoardEventListener();
         this.newColumnEventListener();
         this.editColumnTitleEventListener();
-        // this.editCardTitleEventListener();
         this.deleteBoardEventListener();
         this.showCardsEventListener();
         this.addNewCardEventListener();
     },
 
-    deleteBoard: function(event){
+    deleteBoard: function (event) {
         let deleteButton = event.currentTarget;
         let boardId = deleteButton.dataset.boardid;
         dataHandler.deleteBoard(boardId, dom.loadBoards);
     },
 
-    addNewCard: function(event){
+    deleteCard: function (event){
+        let deleteCardBtn = event.currentTarget;
+        let cardId = deleteCardBtn.dataset.cardid;
+        dataHandler.deleteCard(cardId, dom.loadBoards);
+    },
+
+    addNewCard: function (event) {
         let addBtn = event.currentTarget;
         let boardId = addBtn.dataset.boardid;
         dataHandler.createNewCard(boardId, dom.loadBoards)
     },
-      
-    addBoardTitleEventListener: function() {
+
+    addBoardTitleEventListener: function () {
         let board_title_elements = document.querySelectorAll(".board-title");
         board_title_elements.forEach((element) => {
             element.addEventListener('dblclick', this.changeBoardTitle)
@@ -244,39 +262,30 @@ export let dom = {
     },
     newBoardEventListener: function () {
         let newBoardBtn = document.querySelector("#newBoard");
-        newBoardBtn.addEventListener('click',  this.addNewBoard)
+        newBoardBtn.addEventListener('click', this.addNewBoard)
     },
 
     showCardsEventListener: function () {
         let showCardsBtn = document.querySelectorAll(".board-data");
         showCardsBtn.forEach((element) => {
-            element.addEventListener('click',this.loadCards)
+            element.addEventListener('click', this.showAndHideCards)
         });
     },
 
-      
-    newColumnEventListener: function() {
+
+    newColumnEventListener: function () {
         let newColumnBtn = document.querySelectorAll(".column-btn");
         newColumnBtn.forEach((element) => {
             element.addEventListener('click', this.addNewColumn)
         });
     },
 
-    editColumnTitleEventListener: function() {
+    editColumnTitleEventListener: function () {
         let columnTitleElements = document.querySelectorAll(".board-column-title");
         columnTitleElements.forEach((element) => {
             element.addEventListener('dblclick', this.changeColumnTitle)
         });
     },
-
-    // editCardTitleEventListener: function() {
-    //     let cardTitleElements = document.querySelectorAll(".card-title");
-    //     console.log(cardTitleElements);
-    //     cardTitleElements.forEach((element) => {
-    //         console.log('fuck e:', );
-    //         element.addEventListener('dblclick', this.changeCardTitle)
-    //     });
-    // },
 
     deleteBoardEventListener: function () {
         let deleteBtnElements = document.querySelectorAll('.delete');
@@ -287,8 +296,8 @@ export let dom = {
 
     addNewCardEventListener: function () {
         let addNewCardElements = document.querySelectorAll('.board-add');
-        addNewCardElements.forEach((elemnt) => {
-            elemnt.addEventListener('click', this.addNewCard)
+        addNewCardElements.forEach((element) => {
+            element.addEventListener('click', this.addNewCard)
         });
     }
 
