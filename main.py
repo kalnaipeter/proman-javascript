@@ -48,6 +48,13 @@ def edit_column_title(column_id:int):
     data_handler.edit_column_title(column_id, request.json["new_title"])
 
 
+@app.route("/edit-card-title/<int:card_id>", methods=["POST"])
+@json_response
+def edit_card_title(card_id:int):
+    print(card_id, 'MMMMMMMMMMMMMMMMMMMMMMM')
+    data_handler.edit_card_title(card_id, request.json["new_title"])
+
+
 @app.route("/add-new-board",methods=["POST"])
 @json_response
 def add_new_board():
@@ -96,6 +103,7 @@ def login_registration():
                 if verify_password:
                     session["username"] = request.form["username"]
             return redirect(url_for("index"))
+
 
 
 @app.route("/add-new-column/<int:board_id>", methods=["POST"])

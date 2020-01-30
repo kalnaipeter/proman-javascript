@@ -35,7 +35,6 @@ export let dom = {
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", boardNode);
         dom.createColumns(board);
-        dom.loadCards(board.id);
     },
 
 
@@ -45,6 +44,7 @@ export let dom = {
             let newColumn = dom.createColumn(board.id, column['title'], column['id']);
             columnsContainer.appendChild(newColumn);
         }
+        dom.loadCards(board.id);
     },
 
     createColumn: function (board_id, columnTitle, columnId) {
@@ -80,19 +80,26 @@ export let dom = {
         let columnTitle = document.querySelector(`[data-columnid='${statusTitle}']`);
         let columnTitleChild = columnTitle.firstElementChild.nextSibling;
         let cardElement = document.createElement("div");
-        cardElement.setAttribute("class", "card");
-        cardElement.innerHTML = `
-                            <div class="card-remove" data-card="${card.id}"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">${card.title}</div>
-                        `;
+        cardElement.setAttribute("class","card");
+        let cardRemove = document.createElement("div");
+        cardRemove.setAttribute("class","card-remove");
+        cardRemove.dataset.cardid = `${card.id}`;
+        cardRemove.innerHTML = `<i class="fas fa-trash-alt"></i>`;
+        let cardTitle = document.createElement("div");
+        cardTitle.setAttribute("class","card-title");
+        cardTitle.dataset.cardid = `${card.id}`;
+        cardTitle.innerHTML = `${card.title}`;
+        cardElement.appendChild(cardTitle);
+        cardElement.appendChild(cardRemove);
         columnTitleChild.appendChild(cardElement);
-        cardElement.querySelector('.card-remove').addEventListener('click', this.deleteCard);
+        cardElement.querySelector('.card-title').addEventListener('dblclick', this.changeCardTitle);
+        cardRemove.addEventListener('click', this.deleteCard);
     },
 
     showBoards: function (boards) {
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.innerHTML = ``;
-        for (let board of boards) {
+        for(let board of boards) {
             this.showBoard(board);
         }
     },
@@ -173,7 +180,38 @@ export let dom = {
             }
         });
     },
-    addNewBoard: function () {
+    changeCardTitle: function (event) {
+        console.log('event: ', event);
+        let titleElement = event.currentTarget;
+        let cardTitle = titleElement.innerText;
+        let inputField = document.createElement("input");
+        let cardId = titleElement.dataset.cardid;
+        let alreadyChangedBack = false;
+        inputField.setAttribute('value', cardTitle);
+
+        titleElement.innerHTML = "";
+        titleElement.appendChild(inputField);
+        inputField.focus();
+        inputField.addEventListener('blur',(event) => {
+            if (!alreadyChangedBack){
+                titleElement.innerHTML = cardTitle;
+            }
+        });
+
+        inputField.addEventListener('keypress',(event) => {
+            if (event.key == "Enter"){
+                alreadyChangedBack = true;
+                let newTitle = inputField.value;
+                let changeBackInputField = () => {
+                    titleElement.innerHTML = newTitle;
+                };
+
+                dataHandler.sendNewCardTitle(cardId, newTitle, changeBackInputField);
+                event.preventDefault();
+            }
+        });
+    },
+    addNewBoard: function(){
         dataHandler.createNewBoard(dom.loadBoards);
     },
 
@@ -196,7 +234,6 @@ export let dom = {
         this.deleteBoardEventListener();
         this.showCardsEventListener();
         this.addNewCardEventListener();
-        this.deleteCardEventListener();
     },
 
     deleteBoard: function (event) {
@@ -207,8 +244,7 @@ export let dom = {
 
     deleteCard: function (event){
         let deleteCardBtn = event.currentTarget;
-        let cardId = deleteCardBtn.dataset.card;
-        console.log(cardId);
+        let cardId = deleteCardBtn.dataset.cardid;
         dataHandler.deleteCard(cardId, dom.loadBoards);
     },
 

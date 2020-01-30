@@ -43,6 +43,10 @@ def edit_column_title(column_id, new_title):
     return persistence.edit_column_title(column_id, new_title)
 
 
+def edit_card_title(card_id, new_title):
+    return persistence.edit_card_title(card_id, new_title)
+
+
 def delete_card(card_id):
     return persistence.delete_card(card_id)
 

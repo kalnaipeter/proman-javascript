@@ -90,6 +90,9 @@ export let dataHandler = {
     sendNewColumnTitle: function (columnId, newTitle, callback) {
         this._api_post("/edit-column-title/"+columnId, {'new_title': newTitle}, callback);
     },
+    sendNewCardTitle: function (cardId, newTitle, callback) {
+        this._api_post("/edit-card-title/"+cardId, {'new_title': newTitle}, callback);
+    },
     deleteCard: function (cardId, callback) {
         this._api_post("/delete-card/"+cardId, null, callback)
     }
