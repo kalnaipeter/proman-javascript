@@ -55,8 +55,8 @@ def get_boards():
     return persistence.get_boards(force=True)
 
 
-def add_new_board():
-    return persistence.add_new_board()
+def add_new_board(username):
+    return persistence.add_new_board(username)
     # return persistence.get_latest_board()
 
 

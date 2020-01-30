@@ -81,7 +81,7 @@ def get_board(cursor, board_id):
 @database_common.connection_handler
 def get_boards(cursor, force=False):
     cursor.execute("""
-                    SELECT boards.id, boards.title, array_agg(json_build_object('title', statuses.title, 'id', statuses.id) order by statuses.id) AS columns FROM boards
+                    SELECT boards.id, boards.title,boards.username, array_agg(json_build_object('title', statuses.title, 'id', statuses.id) order by statuses.id) AS columns FROM boards
                     JOIN statuses ON boards.id = statuses.board_id
                     GROUP BY boards.id, boards.title
                     """)
@@ -137,11 +137,12 @@ def edit_column_title(cursor, column_id, new_title):
 
 
 @database_common.connection_handler
-def add_new_board(cursor):
+def add_new_board(cursor,username):
     columns = ['New', 'In Progress', 'Testing', 'Done']
     cursor.execute("""
-                        INSERT INTO boards (title) VALUES ('New Board')
-        """)
+                        INSERT INTO boards (title,username) VALUES ('New Board',%(username)s)
+        """,
+                   {"username": username})
     latest_board_id = get_latest_board()
     for column_title in columns:
         cursor.execute("""
@@ -178,12 +179,12 @@ def registration(cursor, username, password):
 @database_common.connection_handler
 def get_hash_from_database(cursor, username):
     cursor.execute("""
-                    SELECT password FROM usertable
+                    SELECT password,id FROM usertable
                     WHERE username = %(username)s
                     """,
                    {"username": username})
-    hash = cursor.fetchone()
-    return hash
+    data = cursor.fetchone()
+    return data
 
 
 @database_common.connection_handler

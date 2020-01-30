@@ -8,7 +8,8 @@ ALTER TABLE IF EXISTS ONLY  public.usertable DROP CONSTRAINT IF EXISTS pk_user_i
 DROP TABLE IF EXISTS public.boards;
 CREATE TABLE boards (
     id serial,
-    title text
+    title text,
+    username text
 );
 
 DROP TABLE IF EXISTS public,cards;
@@ -49,9 +50,9 @@ ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) references boards(id) ON DELETE CASCADE ,
     ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) references statuses(id) ON DELETE CASCADE ;
 
-INSERT INTO boards (title) VALUES
-('Self-instructed week'),
-('Teamwork week');
+INSERT INTO boards (title,username) VALUES
+('Self-instructed week','sly'),
+('Teamwork week','zsolti');
 
 INSERT INTO statuses (title, board_id) VALUES
 ('Things to do', 1),
@@ -61,3 +62,4 @@ INSERT INTO statuses (title, board_id) VALUES
 ('In Progress', 2),
 ('Testing', 2),
 ('Done', 2);
+

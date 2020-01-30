@@ -8,7 +8,9 @@ export let dom = {
 
     loadBoards: function () {
         // retrieves boards and makes showBoards called
-        dataHandler.getBoards(function (boards) {
+        dataHandler.getBoards(function (boardList) {
+            let userSession = boardList["session_id"];
+            let boards = boardList["result"];
             dom.showBoards(boards);
             dom.addEventListeners();
         });
@@ -26,9 +28,16 @@ export let dom = {
                 <button class="board-add" data-boardid="${board.id}">Add Card</button>
                 <button class="board-add column-btn" data-addcolumn="${board.id}">Add New Column</button>
                 <button class="board-toggle board-data" data-boardid="${board.id}"><i class="fas fa-chevron-down"></i></button>
-                <button class="delete" data-boardid="${board.id}">Delete Board</button>
+                <button class="delete" data-boardid="${board.id}">Delete Board</button>`;
+
+        if(board.username) {
+            boardNode +=
+            `<i id="user" data-username="${board.username}">Board by: ${board.username}<i/>`;
+        }
+
+            boardNode += `
             </div>
-                <div class="board-columns hide" data-columns="${board.id}"></div>
+                <div class="board-columns" data-columns="${board.id}"></div>
          </section>
      </div>`;
 
@@ -111,12 +120,14 @@ export let dom = {
         // retrieves cards and makes showCards called
     },
     // here comes more features
-    changeTitle: function(inputField,boardTitle,titleElement,alreadyChangedBack,boardId){
+    changeTitle: function(event,titleElement,alreadyChangedBack,boardId){
+        let boardTitle = titleElement.innerText;
+        let inputField = document.createElement("input");
         inputField.setAttribute('value', boardTitle);
         titleElement.innerHTML = "";
         titleElement.appendChild(inputField);
         inputField.focus();
-        inputField.addEventListener('blur', (event) => {
+        inputField.addEventListener('blur', () => {
             if (!alreadyChangedBack) {
                 titleElement.innerHTML = boardTitle;
             }
@@ -136,23 +147,19 @@ export let dom = {
 
     changeBoardTitle: function (event) {
         let titleElement = event.currentTarget;
-        let boardTitle = titleElement.innerText;
-        let inputField = document.createElement("input");
         let boardId = titleElement.dataset.board;
         let alreadyChangedBack = false;
-        dom.changeTitle(inputField,boardTitle,titleElement,alreadyChangedBack,boardId)
+        dom.changeTitle(event,titleElement,alreadyChangedBack,boardId)
     },
     changeColumnTitle: function (event) {
         let titleElement = event.currentTarget;
-        let columnTitle = titleElement.innerText;
-        let inputField = document.createElement("input");
         let titleContainer = event.currentTarget.parentNode;
         let columnId = titleContainer.dataset.columnid.replace("'", "");
         columnId = columnId.replace("'", "");
         let alreadyChangedBack = false;
-        dom.changeTitle(inputField,columnTitle,titleElement,alreadyChangedBack,columnId)
+        dom.changeTitle(event,titleElement,alreadyChangedBack,columnId)
     },
-    
+
     addNewBoard: function () {
         dataHandler.createNewBoard(dom.loadBoards);
     },

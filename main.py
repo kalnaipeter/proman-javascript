@@ -45,8 +45,8 @@ def edit_column_title(column_id:int):
 @app.route("/add-new-board",methods=["POST"])
 @json_response
 def add_new_board():
-    print("add")
-    data_handler.add_new_board()
+    username = session["username"]
+    data_handler.add_new_board(username)
 
 
 @app.route("/get-boards")
@@ -55,8 +55,14 @@ def get_boards():
     """
     All the boards
     """
-    print(data_handler.get_boards())
-    return data_handler.get_boards()
+    result = data_handler.get_boards()
+    result = list(result)
+    print(result)
+    board_data = {
+        "result": result,
+        "session_id": session["user_id"]
+    }
+    return board_data
 
 
 @app.route("/get-boards/<int:board_id>")
@@ -83,11 +89,12 @@ def login_registration():
             session["username"] = request.form["username"]
             return redirect(url_for("index"))
         else:
-            if data_handler.get_hash_from_database(request.form["username"]) is not None:
-                database_password = data_handler.get_hash_from_database(request.form["username"])
+            user_data = data_handler.get_hash_from_database(request.form["username"])
+            if user_data is not None:
                 verify_password = data_handler.verify_password(request.form["password"],
-                                                              database_password["password"])
+                                                               user_data["password"])
                 if verify_password:
+                    session["user_id"] = user_data["id"]
                     session["username"] = request.form["username"]
             return redirect(url_for("index"))
 
