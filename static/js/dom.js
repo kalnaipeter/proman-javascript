@@ -86,6 +86,7 @@ export let dom = {
                             <div class="card-title">${card.title}</div>
                         `;
         columnTitleChild.appendChild(cardElement);
+        cardElement.querySelector('.card-remove').addEventListener('click', this.deleteCard);
     },
 
     showBoards: function (boards) {
@@ -255,13 +256,6 @@ export let dom = {
         deleteBtnElements.forEach((element) => {
             element.addEventListener('click', this.deleteBoard)
         });
-    },
-
-    deleteCardEventListener: function(){
-        let deleteBtnElements = document.querySelectorAll('.card-remove');
-        for (const btn of deleteBtnElements){
-            btn.addEventListener('click', this.deleteCard)
-        }
     },
 
     addNewCardEventListener: function () {
